@@ -39,6 +39,10 @@
 
 ## Environment
 
+**Flutter version** : 2.2.1
+
+**Flutter channel** : Stable
+
 **iOS**
 - iOS 13+
 

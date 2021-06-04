@@ -1,16 +1,71 @@
-# flutter_demo_structure
+**A Demo Structure Flutter project.**
 
-A new Flutter project.
+```bash
+├───android                             <-- Android related code
+├───assets                              <-- Here we add our icons/image/fonts
+│   ├───fonts
+│   └───image
+├───ios
+├───lib
+│   ├───core                            <-- Core files of apps 
+│   │   ├───db                          <-- Core files of apps 
+│   │   ├───di
+│   │   │   └───api                     <-- API configs
+│   │   │       ├───interceptor         <-- API interceptors
+│   │   │       ├───repo                <-- repositories for API calls
+│   │   │       ├───response            <-- response parser fo API calls
+│   │   │       │   ├───api_base        <-- base response parser fo API calls
+│   │   │       │   └───base            <-- common response parser fo API calls
+│   │   │       └───service             <-- services for API calls
+│   │   └───navigation                  <-- navigation service related configs
+│   ├───fcm                             <-- Fcm service related configs
+│   ├───model                           <-- PODO models of API calls
+│   ├───ui                              <-- App UI
+│   │   ├───auth                        <-- App UI module
+│   │   │   ├───login
+│   │   │   │   └───store               <-- store for API call using Mobx structure
+│   │   │   └───sign_up
+│   │   └───home
+│   ├───util                            <-- Utils/Helper class
+│   ├───values                          <-- Common values, dummy data, App theme,style configs
+│   │   └───extensions                  <-- extension methods
+│   └───widget
+│       └───credit_card_form            <-- common credit card validator
+├───test                                <-- Widget, Unit, Integration test
+└───web                                 <-- Web configs & web files
+    └───icons                           <-- icons for web
+```
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Environment
 
-A few resources to get you started if this is your first Flutter project:
+**iOS**
+- iOS 13+
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+**Android**
+- Android 4.4+
+    - minSdkVersion 19
+- targetSdkVersion 30
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Code Style
+- [Effective Dart](https://dart.dev/guides/language/effective-dart)
+
+## Assets, Fonts
+
+**If added some assets or fonts**
+
+- Use [AssetsRefGenerator](https://github.com/AndrewShen812/AssetsRefGenerator) **(lib/res.dart)**
+
+## Models
+
+**models for api results**
+
+- Use [QuickType](https://app.quicktype.io/)
+
+#### Architecture
+
+|Working status|Category|Description|
+|:---:|---|---|
+| ✅ | Base | Using [Mobx](https://pub.dev/packages/mobx) + [build_runner](https://pub.dev/packages/build_runner)  
+| ✅ | Networking | Using [dio](https://pub.dev/packages/dio) 
+| ✅ | Data | Using [json serializable](https://pub.dev/packages/json_serializable) 

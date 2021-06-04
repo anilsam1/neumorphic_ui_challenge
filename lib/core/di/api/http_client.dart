@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/di/api/api_end_points.dart';
 import 'package:flutter_demo_structure/core/di/api/interceptor/custom_interceptors.dart';
 import 'package:flutter_demo_structure/core/di/api/interceptor/internet_interceptor.dart';
@@ -45,7 +46,7 @@ class HttpClient {
       final response = await _client.get(url);
       responseJson = returnResponse(response);
     } on DioError catch (e) {
-      print('Dio Error');
+      debugPrint('Dio Error');
       DioErrorUtil.handleError(e);
     }
     return responseJson;
@@ -91,7 +92,7 @@ class HttpClient {
 
   dynamic returnResponse(Response response) {
     final mapData = jsonDecode((response.data));
-    print("${mapData["code"]}");
+    debugPrint("${mapData["code"]}");
     switch (mapData["code"]) {
       case "0":
       case "1":
@@ -113,7 +114,7 @@ class HttpClient {
       case 200:
       case 302:
         var responseJson = response.data;
-        print(responseJson);
+        debugPrint(responseJson);
         return responseJson;
       case 400:
         throw BadRequestException(response.data.toString());
@@ -128,10 +129,10 @@ class HttpClient {
   }
 
   wrapRequest(body) {
-    print("-----------REQUEST-------------");
-    print(body);
-    print("------------------------");
-    print(jsonEncode(body));
+    debugPrint("-----------REQUEST-------------");
+    debugPrint(body);
+    debugPrint("------------------------");
+    debugPrint(jsonEncode(body));
     return jsonEncode(body);
   }
 }

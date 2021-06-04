@@ -28,7 +28,7 @@ class _MediaDialogState extends State<MediaDialog> {
 
   @override
   void initState() {
-    print("mediaType: ${jsonEncode(widget.data)}");
+    debugPrint("mediaType: ${jsonEncode(widget.data)}");
 
     isImage = (widget.data.mediaName.contains(".jpg") ||
         widget.data.mediaName.contains(".jpeg") ||
@@ -42,7 +42,7 @@ class _MediaDialogState extends State<MediaDialog> {
       _controller.addListener(() {
         setState(() {});
         if (_controller.value.position.inSeconds == _controller.value.duration.inSeconds / 2) {
-          print('video Ended');
+          debugPrint('video Ended');
           widget.callback(widget.data.hotId);
         }
       });

@@ -62,7 +62,7 @@ class _CountDownTimerState extends State<CountDownTimer> with TickerProviderStat
           if (status == AnimationStatus.completed) {
             widget.whenTimeExpires();
           } else if (status == AnimationStatus.dismissed) {
-            print("Animation Complete");
+            debugPrint("Animation Complete");
           }
         });
       });

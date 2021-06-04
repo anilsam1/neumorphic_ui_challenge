@@ -1,13 +1,12 @@
 import 'dart:async';
-
 import 'dart:convert';
 
-class NotificationsBloc {
+import 'package:flutter/material.dart';
 
+class NotificationsBloc {
   NotificationsBloc._internal();
 
   static final NotificationsBloc instance = NotificationsBloc._internal();
-
 
   final StreamController<LocalNotification> _notificationsStreamController =
       StreamController<LocalNotification>();
@@ -17,7 +16,7 @@ class NotificationsBloc {
   }
 
   void newNotification(LocalNotification notification) {
-    print(jsonEncode(notification.data));
+    debugPrint(jsonEncode(notification.data));
     _notificationsStreamController.sink.add(notification);
   }
 

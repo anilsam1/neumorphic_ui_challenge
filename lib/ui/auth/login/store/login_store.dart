@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
 import 'package:flutter_demo_structure/core/di/api/app_exceptions.dart';
 import 'package:flutter_demo_structure/core/di/api/repo/uthentication_repository.dart';
@@ -33,9 +34,9 @@ abstract class _LoginStoreBase with Store {
     } on AppException catch (e) {
       errorMessage = e.toString();
     } catch (e, st) {
-      print("onCatch.....");
-      print(e.toString());
-      print(st.toString());
+      debugPrint("onCatch.....");
+      debugPrint(e.toString());
+      debugPrint(st.toString());
       errorMessage = "False";
     }
   }

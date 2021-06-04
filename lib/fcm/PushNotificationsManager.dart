@@ -49,7 +49,7 @@
 //
 //     _firebaseMessaging.getToken().then((String? token) {
 //       appDB.fcmToken = token!;
-//       print("Push Messaging token: ${appDB.fcmToken}");
+//       debugPrint("Push Messaging token: ${appDB.fcmToken}");
 //     });
 //
 //     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -64,8 +64,8 @@
 //     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 //
 //     if (initialMessage != null) {
-//       print("====================initialMessage=======================");
-//       printRemoteMessage(initialMessage);
+//       debugPrint("====================initialMessage=======================");
+//       debugPrintRemoteMessage(initialMessage);
 //     }
 //
 //     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -73,8 +73,8 @@
 //     // Also handle any interaction when the app is in the background via a
 //     // Stream listener
 //     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-//       print("====================onMessageOpenedApp=======================");
-//       printRemoteMessage(message);
+//       debugPrint("====================onMessageOpenedApp=======================");
+//       debugPrintRemoteMessage(message);
 //       updateNavigation(message.data);
 //     });
 //
@@ -84,8 +84,8 @@
 //     flutterLocalNotificationsPlugin.initialize(
 //       platform,
 //       onSelectNotification: (payload) {
-//         print("====================onSelectNotification=======================");
-//         print(payload);
+//         debugPrint("====================onSelectNotification=======================");
+//         debugPrint(payload);
 //         updateNavigation(jsonDecode(payload!));
 //         return Future.value(jsonDecode(payload));
 //       },
@@ -103,8 +103,8 @@
 //     var notification = payload.notification;
 //     var data = payload.data;
 //
-//     print("====================_showNotificationWithDefaultSound=======================");
-//     printRemoteMessage(payload);
+//     debugPrint("====================_showNotificationWithDefaultSound=======================");
+//     debugPrintRemoteMessage(payload);
 //
 //     await flutterLocalNotificationsPlugin.show(
 //       0,
@@ -124,8 +124,8 @@
 // const String quizPush = "quiz_push";
 //
 // void updateNavigation(Map data) {
-//   print("===============updateNavigation=================");
-//   print(jsonEncode(data));
+//   debugPrint("===============updateNavigation=================");
+//   debugPrint(jsonEncode(data));
 //
 //   switch (data["tag"]) {
 //     case pollPush:
@@ -137,18 +137,18 @@
 //     case quizPush:
 //     case storyPush:
 //       {
-//         print("StoryPUSH NAVIGATE:");
+//         debugPrint("StoryPUSH NAVIGATE:");
 //         // navigator.pushOrReplacementNamed(RouteName.landing, arguments: Map.of({"tab": 0}));
 //         break;
 //       }
 //   }
 // }
 //
-// printRemoteMessage(RemoteMessage message) {
-//   print(message);
-//   print("Notification_TITLE: ${jsonEncode(message.notification!.title)}");
-//   print("Notification_BODY: ${jsonEncode(message.notification!.body)}");
-//   print("Data: ${jsonEncode(message.data)}");
+// debugPrintRemoteMessage(RemoteMessage message) {
+//   debugPrint(message);
+//   debugPrint("Notification_TITLE: ${jsonEncode(message.notification!.title)}");
+//   debugPrint("Notification_BODY: ${jsonEncode(message.notification!.body)}");
+//   debugPrint("Data: ${jsonEncode(message.data)}");
 // }
 //
 // /*
@@ -159,7 +159,7 @@
 //   // If you're going to use other Firebase services in the background, such as Firestore,
 //   // make sure you call `initializeApp` before using other Firebase services.
 //   await Firebase.initializeApp();
-//   print('Handling a background message ${message.messageId}');
+//   debugPrint('Handling a background message ${message.messageId}');
 //
 //   updateNavigation(message.data);
 // }

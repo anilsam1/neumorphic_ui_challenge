@@ -1,4 +1,6 @@
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
 //https://stackoverflow.com/a/65469596
 
 class BaseResponse {
@@ -23,9 +25,9 @@ class SingleResponse<T> extends BaseResponse {
 
   factory SingleResponse.fromJson(Map<String, dynamic> json,
       {Function(Map<String, dynamic>)? create}) {
-    print("DataMap:---------");
-    print("${jsonEncode(json)}");
-    print("${jsonEncode(json["data"])}");
+    debugPrint("DataMap:---------");
+    debugPrint("${jsonEncode(json)}");
+    debugPrint("${jsonEncode(json["data"])}");
     return SingleResponse<T>(
         code: json["code"],
         message: json["message"],

@@ -11,7 +11,7 @@ showMessage(
   String message, {
   MessageType type = MessageType.INFO,
 }) {
-  print("ShowMessage: $message");
+  debugPrint("ShowMessage: $message");
 
   try {
     if (_flushBar != null) _flushBar!.dismiss();
@@ -32,6 +32,6 @@ showMessage(
       ],
     )..show(NavigationService.navigatorKey.currentContext!);
   } catch (onError) {
-    print(onError);
+    debugPrint(onError.toString());
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
 import 'package:flutter_demo_structure/core/navigation/navigation_service.dart';
 import 'package:flutter_demo_structure/core/navigation/routes.dart';
@@ -12,7 +13,7 @@ class DioErrorUtil {
   static handleError(DioError error) {
     String errorDescription = "";
     if (error is DioError) {
-      print(error);
+      debugPrint(error.toString());
       switch (error.type) {
         case DioErrorType.other:
           if (error.error is SocketException) {
@@ -33,8 +34,8 @@ class DioErrorUtil {
           throw ServerSideException("Request can't be handled for now. Please try after sometime.");
 
         case DioErrorType.response:
-          print("Response:");
-          print(error);
+          debugPrint("Response:");
+          debugPrint(error.toString());
           if (error.response!.statusCode == 12039 || error.response!.statusCode == 12040) {
             throw ConnectionException("Connection to server failed due to internet connection.");
           } else if (401 == error.response!.statusCode) {

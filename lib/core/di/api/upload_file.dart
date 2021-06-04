@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class UploadFile {
@@ -12,7 +13,7 @@ class UploadFile {
       var response = await http.put(Uri.parse(url), body: image.readAsBytesSync());
       if (response.statusCode == 200) {
         isUploaded = true;
-        print(response.body);
+        debugPrint(response.body);
       }
     } catch (e) {
       throw ('Error uploading photo');

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 String getVerboseDateTimeRepresentation(String dateTimes) {
@@ -48,8 +49,8 @@ extension StringX on String {
 
       return DateFormat(outFormat).format(dateTime);
     } catch (error) {
-      print("DateTimeHelper_timeFromStamp");
-      print(error);
+      debugPrint("DateTimeHelper_timeFromStamp");
+      debugPrint(error.toString());
     }
   }
 
@@ -96,8 +97,8 @@ extension StringX on String {
       var dateTime = DateFormat(inFormat).parse(this);
       return DateFormat(outFormat).format(dateTime);
     } catch (error) {
-      print("DateTimeHelper_timeFromStamp");
-      print(error);
+      debugPrint("DateTimeHelper_timeFromStamp");
+      debugPrint(error.toString());
     }
   }
 }

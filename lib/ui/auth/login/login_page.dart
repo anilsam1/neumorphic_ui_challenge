@@ -63,13 +63,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   addDisposer() {
-    print("Add reaction");
+    debugPrint("Add reaction");
     _disposers ??= [
       // success reaction
       reaction((_) => authStore.loginResponse, (SingleResponse response) {
         showLoading.value = false;
 
-        print("ONResponse Login: called $response");
+        debugPrint("ONResponse Login: called $response");
         if (response.code == "1") {
           navigator.pushNamedAndRemoveUntil(RouteName.homePage);
           appDB.isLogin = true;
@@ -79,13 +79,13 @@ class _LoginPageState extends State<LoginPage> {
       // error reaction
       reaction((_) => authStore.errorMessage, (String? errorMessage) {
         showLoading.value = false;
-        print("OnError Callled");
+        debugPrint("OnError Callled");
         if (errorMessage != null) {
           showMessage(errorMessage.toString(), type: MessageType.INFO);
         }
       }),
     ];
-    print(_disposers!.length);
+    debugPrint(_disposers!.length.toString());
   }
 
   @override

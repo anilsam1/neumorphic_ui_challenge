@@ -22,7 +22,7 @@ class Routes {
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     final args = settings.arguments;
-    print("Route Name ${settings.name} args $args ");
+    debugPrint("Route Name ${settings.name} args $args ");
     var page;
     switch (settings.name) {
       case RouteName.root:

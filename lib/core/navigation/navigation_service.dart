@@ -25,9 +25,9 @@ class NavigationService {
     var currentPage = "";
     try {
       currentPage = ModalRoute.of(navigatorKey.currentContext!)!.settings.name!;
-      print("----------Current Page: $currentPage");
+      debugPrint("----------Current Page: $currentPage");
     } catch (error) {
-      print(error);
+      debugPrint(error.toString());
     }
 
     return navigatorKey.currentState!

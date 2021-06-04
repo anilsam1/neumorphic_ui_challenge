@@ -7,6 +7,7 @@ class StringConstant {
   static const String dataNotFound = 'Data not found';
   static const String gallery = 'Gallery';
   static const String camera = 'Camera';
+  static const String logout = 'Logout';
 
   //credit card validation
   static const String addNewCard = 'Add New Card';

@@ -5,7 +5,7 @@
 ├───assets                              <-- Here we add our icons/image/fonts
 │   ├───fonts
 │   └───image
-├───ios
+├───ios                                 <-- iOS related code
 ├───lib
 │   ├───core                            <-- Core files of apps 
 │   │   ├───db                          <-- Core files of apps 

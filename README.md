@@ -44,11 +44,11 @@
 **Flutter channel** : Stable
 
 **iOS**
-- iOS 13+
+- iOS 11+
 
 **Android**
-- Android 4.4+
-    - minSdkVersion 19
+- Android 5.0+
+    - minSdkVersion 21
 - targetSdkVersion 30
 
 ## Code Style

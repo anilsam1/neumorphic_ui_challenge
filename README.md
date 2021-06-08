@@ -73,3 +73,4 @@
 | ✅ | Base | Using [Mobx](https://pub.dev/packages/mobx) + [build_runner](https://pub.dev/packages/build_runner)  
 | ✅ | Networking | Using [dio](https://pub.dev/packages/dio) 
 | ✅ | Data | Using [json serializable](https://pub.dev/packages/json_serializable) 
+| ✅ | Session Management | Using [Hive](https://pub.dev/packages/hive)

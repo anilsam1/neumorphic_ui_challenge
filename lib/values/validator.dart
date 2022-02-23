@@ -1,5 +1,5 @@
+import 'package:flutter_demo_structure/util/validtor_custom.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:flutter_demo_structure/widget/validtor_custom.dart';
 
 final mobileValidator = MultiValidator([
   RequiredValidator(errorText: kEnterMobileNumber),

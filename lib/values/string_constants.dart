@@ -8,6 +8,12 @@ class StringConstant {
   static const String gallery = 'Gallery';
   static const String camera = 'Camera';
   static const String logout = 'Logout';
+  static const String pickImage = 'Pick Image';
+  static const String pickVideo = 'Pick Video';
+  static const String pickDocuments = 'Pick Documents';
+  static const String pickAudio = 'Pick Audio';
+  static const String sendException =
+      'Test catcher via email in release mode/ console logs in debug mode';
 
   //credit card validation
   static const String addNewCard = 'Add New Card';

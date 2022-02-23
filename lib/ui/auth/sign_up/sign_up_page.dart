@@ -10,10 +10,10 @@ import 'package:flutter_demo_structure/core/navigation/navigation_service.dart';
 import 'package:flutter_demo_structure/core/navigation/routes.dart';
 import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/ui/auth/login/sign_up_widget.dart';
+import 'package:flutter_demo_structure/util/utils.dart';
 import 'package:flutter_demo_structure/values/colors.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_demo_structure/values/string_constants.dart';
-import 'package:flutter_demo_structure/widget/app_utils.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
 import 'package:flutter_demo_structure/widget/loading.dart';
 import 'package:flutter_demo_structure/widget/text_form_filed.dart';
@@ -299,7 +299,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                showMessage(StringConstant.tNc);
+                                Utils.showMessage(StringConstant.tNc);
                               },
                           ),
                           TextSpan(
@@ -312,7 +312,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                showMessage(StringConstant.privacyPolicy);
+                                Utils.showMessage(StringConstant.privacyPolicy);
                               },
                           ),
                         ],
@@ -329,11 +329,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 //navigator.pushNamed(RouteName.otpVerificationPage);
                 if (_formKey.currentState!.validate()) {
                   if (passwordController.text.trim() != confPasswordController.text.trim()) {
-                    showMessage(StringConstant.passwordMismatch);
+                    Utils.showMessage(StringConstant.passwordMismatch);
                     return;
                   }
                   if (!_isRead.value) {
-                    showMessage(StringConstant.acceptTnC);
+                    Utils.showMessage(StringConstant.acceptTnC);
                     return;
                   }
                   signUpAndNavigateToHome();

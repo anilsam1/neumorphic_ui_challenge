@@ -1,17 +1,17 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_structure/util/media_picker.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_demo_structure/values/string_constants.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:images_picker/images_picker.dart';
 
-class ImagePickerDialog extends StatelessWidget {
-  ImagePickerHandler listener;
-  AnimationController controller;
+class MediaPickerDialog extends StatelessWidget {
+  final MediaPickerHandler listener;
+  final AnimationController controller;
   late BuildContext context;
 
-  ImagePickerDialog(this.listener, this.controller);
+  MediaPickerDialog(this.listener, this.controller);
 
   late Animation<double> _drawerContentsOpacity;
   late Animation<Offset> _drawerDetailsPosition;
@@ -44,6 +44,7 @@ class ImagePickerDialog extends StatelessWidget {
     );
   }
 
+  @override
   void dispose() {
     controller.dispose();
   }
@@ -66,52 +67,55 @@ class ImagePickerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     this.context = context;
     return Material(
-        type: MaterialType.transparency,
-        child: Opacity(
-          opacity: 1.0,
-          child: Container(
-            padding: EdgeInsets.only(left: 30, top: 0.0, right: 30, bottom: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () => listener.openCamera(),
+      type: MaterialType.transparency,
+      child: Opacity(
+        opacity: 1.0,
+        child: Container(
+          padding: EdgeInsets.only(left: 30, top: 0.0, right: 30, bottom: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () => listener.openCamera(),
+                child: roundedButton(
+                  StringConstant.camera,
+                  EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                  AppColor.primaryColor,
+                  AppColor.white,
+                ),
+              ),
+              GestureDetector(
+                onTap: () => listener.openGallery(),
+                child: roundedButton(
+                  StringConstant.gallery,
+                  EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                  AppColor.primaryColor,
+                  AppColor.white,
+                ),
+              ),
+              const SizedBox(height: 15),
+              GestureDetector(
+                onTap: () => dismissDialog(),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 30, top: 0.0, right: 30, bottom: 20),
                   child: roundedButton(
-                    StringConstant.camera,
+                    StringConstant.cancel,
                     EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                     AppColor.primaryColor,
                     AppColor.white,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => listener.openGallery(),
-                  child: roundedButton(
-                      StringConstant.gallery,
-                      EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                      AppColor.primaryColor,
-                      AppColor.white),
-                ),
-                const SizedBox(height: 15),
-                GestureDetector(
-                  onTap: () => dismissDialog(),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 30, top: 0.0, right: 30, bottom: 20),
-                    child: roundedButton(
-                        StringConstant.cancel,
-                        EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-                        AppColor.primaryColor,
-                        AppColor.white),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget roundedButton(String buttonLabel, EdgeInsets margin, Color bgColor, Color textColor) {
-    var loginBtn = Container(
+    return Container(
       width: MediaQuery.of(context).size.width,
       margin: margin,
       padding: EdgeInsets.only(
@@ -135,41 +139,62 @@ class ImagePickerDialog extends StatelessWidget {
         style: textBold.copyWith(color: textColor),
       ),
     );
-    return loginBtn;
   }
 }
 
-class ImagePickerHandler {
-  late ImagePickerDialog imagePicker;
+class MediaPickerHandler {
+  late MediaPickerDialog imagePicker;
   late AnimationController _controller;
-  late ImagePickerListener _listener;
+  late MediaPickerListener _listener;
+  late PickFileType _pickFileType;
+  int _maxPickFileCount = 1;
+  CropOption? _cropOption;
 
-  ImagePickerHandler(this._listener, this._controller);
+  MediaPickerHandler(this._listener, this._controller);
 
   openCamera() async {
     imagePicker.dismissDialog();
-    PickedFile? image =
-        await ImagePicker().getImage(source: ImageSource.camera, maxHeight: 800, maxWidth: 600);
-    _listener.userImage(File(image!.path));
+    List<Media?>? pickedFiles;
+    if (_pickFileType == PickFileType.IMAGE) {
+      pickedFiles = await MediaPicker.pickImageFromCamera(cropOption: _cropOption);
+    } else {
+      pickedFiles = await MediaPicker.pickVideoFromCamera();
+    }
+    _listener.pickedFiles(pickedFiles, _pickFileType);
   }
 
   openGallery() async {
     imagePicker.dismissDialog();
-    PickedFile? image =
-        await ImagePicker().getImage(source: ImageSource.gallery, maxHeight: 800, maxWidth: 600);
-    _listener.userImage(File(image!.path));
+    List<Media?>? pickedFiles;
+    if (_pickFileType == PickFileType.IMAGE) {
+      pickedFiles = await MediaPicker.pickImageFromGallery(
+          maxPickFileCount: _maxPickFileCount, cropOption: _cropOption);
+    } else {
+      pickedFiles = await MediaPicker.pickVideoFromGallery(maxPickFileCount: _maxPickFileCount);
+    }
+    _listener.pickedFiles(pickedFiles, _pickFileType);
   }
 
   void init() {
-    imagePicker = ImagePickerDialog(this, _controller);
+    imagePicker = MediaPickerDialog(this, _controller);
     imagePicker.initState();
   }
 
-  showDialog(BuildContext context) {
+  showDialog(
+    BuildContext context,
+    PickFileType pickFileType, {
+    int maxPickFileCount = 1,
+    CropOption? cropOption,
+  }) {
+    this._pickFileType = pickFileType;
+    this._cropOption = cropOption;
+    this._maxPickFileCount = maxPickFileCount;
     imagePicker.getImage(context);
   }
 }
 
-abstract class ImagePickerListener {
-  userImage(File _image);
+abstract class MediaPickerListener {
+  pickedFiles(List<Media?>? _pickedFilesList, PickFileType pickFileType);
 }
+
+enum PickFileType { IMAGE, VIDEO }

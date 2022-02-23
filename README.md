@@ -2,7 +2,7 @@
 
 ```bash
 ├───android                             <-- Android related code
-├───assets                              <-- Here we add our icons/image/fonts
+├───assets                              <-- Here we add app icons/image/fonts
 │   ├───fonts
 │   └───image
 ├───ios                                 <-- iOS related code
@@ -12,12 +12,12 @@
 │   │   ├───di
 │   │   │   └───api                     <-- API configs
 │   │   │       ├───interceptor         <-- API interceptors
-│   │   │       ├───repo                <-- repositories for API calls
-│   │   │       ├───response            <-- response parser fo API calls
-│   │   │       │   ├───api_base        <-- base response parser fo API calls
-│   │   │       │   └───base            <-- common response parser fo API calls
-│   │   │       └───service             <-- services for API calls
-│   │   └───navigation                  <-- navigation service related configs
+│   │   │       ├───repo                <-- Repositories for API calls
+│   │   │       ├───response            <-- Response parser fo API calls
+│   │   │       │   ├───api_base        <-- Base response parser fo API calls
+│   │   │       │   └───base            <-- Common response parser fo API calls
+│   │   │       └───service             <-- Services for API calls
+│   │   └───navigation                  <-- Navigation service related configs
 │   ├───fcm                             <-- Fcm service related configs
 │   ├───model                           <-- PODO models of API calls
 │   ├───ui                              <-- App UI
@@ -26,11 +26,11 @@
 │   │   │   │   └───store               <-- store for API call using Mobx structure
 │   │   │   └───sign_up
 │   │   └───home
-│   ├───util                            <-- Utils/Helper class
+│   ├───util                            <-- Utils/Helper
+│   │   └───credit_card_validators      <-- Common credit card validator                     
 │   ├───values                          <-- Common values, dummy data, App theme,style configs
-│   │   └───extensions                  <-- extension methods
-│   └───widget
-│       └───credit_card_form            <-- common credit card validator
+│   │   └───extensions                  <-- Extension methods
+│   └───widget                          <-- Common widgets
 ├───test                                <-- Widget, Unit, Integration test
 └───web                                 <-- Web configs & web files
     └───icons                           <-- icons for web

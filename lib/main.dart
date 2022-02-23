@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:catcher/catcher.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,18 +33,33 @@ Future<void> main() async {
 
   //await Firebase.initializeApp();
 
+  //setup catcher
+  CatcherOptions debugOptions = CatcherOptions(DialogReportMode(), [ConsoleHandler()]);
+
+  /// Release configuration. Same as above, but once user accepts dialog, user will be prompted to send email with crash to support.
+  CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
+    EmailManualHandler(["support@email.com"])
+  ]);
+
   // Fixing App Orientation.
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then(
     (value) => runZonedGuarded(() {
-      runApp(MyApp());
+      Catcher(
+        rootWidget: MyApp(),
+        debugConfig: debugOptions,
+        releaseConfig: releaseOptions,
+        navigatorKey: NavigationService.navigatorKey,
+      );
     }, (Object error, StackTrace stackTrace) {
       /// for debug:
       if (!kReleaseMode) {
         debugPrint('[Error]: ${error.toString()}');
         debugPrint('[Stacktrace]: ${stackTrace.toString()}');
+      } else {
+        Catcher.reportCheckedError(error, stackTrace);
       }
     }),
   );
@@ -57,7 +73,14 @@ class MyApp extends StatelessWidget {
         title: StringConstant.appName,
         theme: appTheme,
         debugShowCheckedModeBanner: false,
-        navigatorKey: NavigationService.navigatorKey,
+        navigatorKey: Catcher.navigatorKey,
+        builder: (BuildContext context, Widget? widget) {
+          Catcher.addDefaultErrorWidget(
+            showStacktrace: true,
+            maxWidthForSmallMode: 150,
+          );
+          return widget!;
+        },
         routes: Routes.route(),
         onGenerateRoute: Routes.onGenerateRoute,
         onUnknownRoute: Routes.onUnknownRoute,

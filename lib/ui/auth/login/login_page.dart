@@ -10,10 +10,10 @@ import 'package:flutter_demo_structure/core/navigation/navigation_service.dart';
 import 'package:flutter_demo_structure/core/navigation/routes.dart';
 import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/ui/auth/login/store/login_store.dart';
+import 'package:flutter_demo_structure/util/utils.dart';
 import 'package:flutter_demo_structure/values/colors.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_demo_structure/values/string_constants.dart';
-import 'package:flutter_demo_structure/widget/app_utils.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
 import 'package:flutter_demo_structure/widget/loading.dart';
 import 'package:flutter_demo_structure/widget/text_form_filed.dart';
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
         showLoading.value = false;
         debugPrint("OnError Callled");
         if (errorMessage != null) {
-          showMessage(errorMessage.toString(), type: MessageType.INFO);
+          Utils.showMessage(errorMessage.toString(), type: MessageType.INFO);
         }
       }),
     ];

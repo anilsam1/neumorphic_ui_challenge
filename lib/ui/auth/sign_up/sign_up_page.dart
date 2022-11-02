@@ -1,34 +1,28 @@
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_demo_structure/core/navigation/navigation_service.dart';
-import 'package:flutter_demo_structure/core/navigation/routes.dart';
+import 'package:flutter_demo_structure/core/locator.dart';
 import 'package:flutter_demo_structure/res.dart';
+import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/ui/auth/login/sign_up_widget.dart';
-import 'package:flutter_demo_structure/util/utils.dart';
-import 'package:flutter_demo_structure/values/colors.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_demo_structure/values/string_constants.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
-import 'package:flutter_demo_structure/widget/loading.dart';
 import 'package:flutter_demo_structure/widget/text_form_filed.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobx/mobx.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool _isHidden = true;
+  final bool _isHidden = true;
   late GlobalKey<FormState> _formKey;
   late TextEditingController nameController,
       emailController,
@@ -37,7 +31,7 @@ class _SignUpPageState extends State<SignUpPage> {
       confPasswordController;
   late FocusNode mobileNode;
   ValueNotifier<bool> showLoading = ValueNotifier<bool>(false);
-  ValueNotifier<bool> _isRead = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _isRead = ValueNotifier<bool>(false);
 
   late List<ReactionDisposer> _disposers;
 
@@ -74,26 +68,21 @@ class _SignUpPageState extends State<SignUpPage> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: ValueListenableBuilder(
-            valueListenable: showLoading,
-            builder: (context, value, child) => Loading(
-              status: showLoading.value,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  30.0.VBox,
-                  getHeaderContent(),
-                  getSignUpForm(),
-                  40.0.VBox,
-                  SignUpWidget(
-                    fromLogin: false,
-                    onTap: () => navigator.pop(),
-                  ),
-                  40.0.VBox,
-                ],
-              ).wrapPadding(
-                padding: EdgeInsets.only(top: 0.h, left: 30.w, right: 30.w),
-              ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 0, left: 30, right: 30).r,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                30.0.verticalSpace,
+                getHeaderContent(),
+                getSignUpForm(),
+                40.0.verticalSpace,
+                SignUpWidget(
+                  fromLogin: false,
+                  onTap: () => Navigator.of(context).pop(),
+                ),
+                40.0.verticalSpace,
+              ],
             ),
           ),
         ),
@@ -104,7 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget getHeaderContent() {
     return Column(
       children: [
-        10.0.VBox,
+        10.0.verticalSpace,
         Text(
           StringConstant.signUp.toUpperCase(),
           style: textBold.copyWith(
@@ -112,7 +101,7 @@ class _SignUpPageState extends State<SignUpPage> {
             fontSize: 24.sp,
           ),
         ),
-        10.0.VBox,
+        10.0.verticalSpace,
         Text(
           StringConstant.fillDetails,
           style: textLight.copyWith(
@@ -129,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
         key: _formKey,
         child: Column(
           children: [
-            25.0.VBox,
+            25.0.verticalSpace,
             AppTextField(
               controller: nameController,
               label: StringConstant.name,
@@ -146,8 +135,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: 26.0,
                 ),
               ),
-            ).wrapPaddingHorizontal(20),
-            10.0.VBox,
+            ),
+            10.0.verticalSpace,
             AppTextField(
               controller: emailController,
               label: StringConstant.email,
@@ -163,8 +152,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: 26.0,
                 ),
               ),
-            ).wrapPaddingHorizontal(20),
-            10.0.VBox,
+            ),
+            10.0.verticalSpace,
             AppTextField(
               controller: mobileController,
               label: StringConstant.mobNumber,
@@ -188,39 +177,42 @@ class _SignUpPageState extends State<SignUpPage> {
                       width: 26.0,
                     ),
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        '+${_selectedDialogCountry.phoneCode}',
-                        style: textMedium.copyWith(
-                          fontSize: 15.sp,
-                        ),
-                      ),
-                      2.0.HBox,
-                      Image.asset(
-                        Res.arrow_down,
-                        color: AppColor.osloGray,
-                        height: 8.0,
-                        width: 8.0,
-                      ),
-                    ],
-                  ).wrapPaddingVertical(12.0).addGestureTap(() async => {
-                        Future.delayed(Duration.zero, () {
-                          mobileNode.unfocus();
-                          mobileNode.canRequestFocus = false;
-                        }),
-                        await _openCountryPickerDialog(),
-                        mobileNode.canRequestFocus = true,
+                  GestureDetector(
+                    onTap: () async => {
+                      Future.delayed(Duration.zero, () {
+                        mobileNode.unfocus();
+                        mobileNode.canRequestFocus = false;
                       }),
+                      await _openCountryPickerDialog(),
+                      mobileNode.canRequestFocus = true,
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          '+${_selectedDialogCountry.phoneCode}',
+                          style: textMedium.copyWith(
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        2.0.horizontalSpace,
+                        Image.asset(
+                          Res.arrow_down,
+                          color: AppColor.osloGray,
+                          height: 8.0,
+                          width: 8.0,
+                        ),
+                      ],
+                    ),
+                  ),
                   Container(
                     height: 12.0,
                     color: Colors.grey,
                     width: 1.5,
-                  ).wrapPaddingHorizontal(12.0),
+                  ),
                 ],
               ),
-            ).wrapPaddingHorizontal(20),
-            10.0.VBox,
+            ),
+            10.0.verticalSpace,
             AppTextField(
               label: StringConstant.password,
               hint: StringConstant.password,
@@ -240,8 +232,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: 26.0,
                 ),
               ),
-            ).wrapPaddingHorizontal(20),
-            10.0.VBox,
+            ),
+            10.0.verticalSpace,
             AppTextField(
               label: StringConstant.confPassword,
               hint: StringConstant.confPassword,
@@ -261,8 +253,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: 26.0,
                 ),
               ),
-            ).wrapPaddingHorizontal(20),
-            16.0.VBox,
+            ),
+            16.0.verticalSpace,
             ValueListenableBuilder<bool>(
               valueListenable: _isRead,
               builder: (context, bool value, child) => Row(
@@ -277,18 +269,19 @@ class _SignUpPageState extends State<SignUpPage> {
                       padding: EdgeInsets.zero,
                       icon: Image.asset(
                         Res.checked_box,
-                        color: value ? AppColor.primaryColor : AppColor.osloGray,
+                        color:
+                            value ? AppColor.primaryColor : AppColor.osloGray,
                       ),
                       onPressed: () => _isRead.value = !value,
                     ),
                   ),
-                  8.0.HBox,
+                  8.0.horizontalSpace,
                   Expanded(
                     child: RichText(
                       text: TextSpan(
                         text: StringConstant.iAgree,
                         style: textLight.copyWith(
-                          color: AppColor.greyColor,
+                          color: AppColor.grey,
                           fontSize: 14.sp,
                         ),
                         children: <InlineSpan>[
@@ -299,10 +292,12 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Utils.showMessage(StringConstant.tNc);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(StringConstant.tNc)));
                               },
                           ),
-                          TextSpan(
+                          const TextSpan(
                             text: StringConstant.and,
                           ),
                           TextSpan(
@@ -312,7 +307,10 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Utils.showMessage(StringConstant.privacyPolicy);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            StringConstant.privacyPolicy)));
                               },
                           ),
                         ],
@@ -321,26 +319,31 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ],
               ),
-            ).wrapPaddingHorizontal(20),
-            18.0.VBox,
+            ),
+            18.0.verticalSpace,
             AppButtonInverse(
               StringConstant.signUp.toUpperCase(),
               () {
                 //navigator.pushNamed(RouteName.otpVerificationPage);
                 if (_formKey.currentState!.validate()) {
-                  if (passwordController.text.trim() != confPasswordController.text.trim()) {
-                    Utils.showMessage(StringConstant.passwordMismatch);
+                  if (passwordController.text.trim() !=
+                      confPasswordController.text.trim()) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(StringConstant.passwordMismatch)));
+
                     return;
                   }
                   if (!_isRead.value) {
-                    Utils.showMessage(StringConstant.acceptTnC);
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(StringConstant.acceptTnC)));
+
                     return;
                   }
                   signUpAndNavigateToHome();
                 }
               },
               elevation: 0.0,
-            ).wrapPaddingHorizontal(20),
+            ),
           ],
         ),
       ),
@@ -348,21 +351,21 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   signUpAndNavigateToHome() async {
-    navigator.pushNamed(RouteName.homePage);
+    locator<AppRouter>().push(const HomeRoute());
   }
 
   removeDisposer() {
-    _disposers.forEach((element) {
+    for (var element in _disposers) {
       element.reaction.dispose();
-    });
+    }
   }
 
   Widget _buildDialogItem(Country country) => Row(
         children: <Widget>[
           CountryPickerUtils.getDefaultFlagImage(country),
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
           Text("+${country.phoneCode}"),
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
           Flexible(child: Text(country.name))
         ],
       );
@@ -370,12 +373,13 @@ class _SignUpPageState extends State<SignUpPage> {
   Future _openCountryPickerDialog() => showDialog(
         context: context,
         builder: (context) => CountryPickerDialog(
-          titlePadding: EdgeInsets.all(8.0),
+          titlePadding: const EdgeInsets.all(8.0),
           searchCursorColor: Colors.lightBlueAccent,
-          searchInputDecoration: InputDecoration(hintText: 'Search...'),
+          searchInputDecoration: const InputDecoration(hintText: 'Search...'),
           isSearchable: true,
-          title: Text('Select your phone code'),
-          onValuePicked: (Country country) => setState(() => _selectedDialogCountry = country),
+          title: const Text('Select your phone code'),
+          onValuePicked: (Country country) =>
+              setState(() => _selectedDialogCountry = country),
           itemBuilder: _buildDialogItem,
           priorityList: [
             CountryPickerUtils.getCountryByIsoCode('US'),

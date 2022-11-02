@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// https://stackoverflow.com/a/67151525/14017549
@@ -15,7 +16,7 @@ abstract class GrantPermissionStrategy {
     required final OnGranted onGranted,
   }) async {
     PermissionStatus status = await permission.status;
-    print("GrantPermissionStrategy status: $status");
+    debugPrint("GrantPermissionStrategy status: $status");
     if (status.isPermanentlyDenied) {
       onPermanentlyDenied.call();
       return;
@@ -23,7 +24,7 @@ abstract class GrantPermissionStrategy {
 
     if (!status.isLimited && !status.isGranted) {
       final PermissionStatus result = await permission.request();
-      print(result.index);
+      debugPrint(result.index.toString());
       if (result.isDenied) {
         onPermissionDenied.call();
         return;
@@ -47,7 +48,8 @@ class CameraPermission extends GrantPermissionStrategy {
 }
 
 class PhotosPermission extends GrantPermissionStrategy {
-  PhotosPermission() : super(Platform.isAndroid ? Permission.storage : Permission.photos);
+  PhotosPermission()
+      : super(Platform.isAndroid ? Permission.storage : Permission.photos);
 }
 
 class ContactsPermission extends GrantPermissionStrategy {

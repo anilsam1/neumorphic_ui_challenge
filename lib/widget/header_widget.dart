@@ -1,16 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_demo_structure/res.dart';
-import 'package:flutter_demo_structure/values/extensions/export.dart';
+import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppBarWidget extends StatefulWidget {
-  Widget? actionMenu;
-  double paddingStart;
-  Color backgroundColor;
+  final Widget? actionMenu;
+  final double paddingStart;
+  final Color backgroundColor;
 
-  AppBarWidget({this.actionMenu, this.paddingStart = 10.0, this.backgroundColor = Colors.white});
+  const AppBarWidget({
+    this.actionMenu,
+    this.paddingStart = 10.0,
+    this.backgroundColor = AppColor.white,
+    super.key,
+  });
 
   @override
   _AppBarWidgetState createState() => _AppBarWidgetState();
@@ -27,14 +30,15 @@ class _AppBarWidgetState extends State<AppBarWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Image.asset(
-            Res.back,
-            height: 20.h,
-            width: 80.w,
-          ).addGestureTap(() {
-            Navigator.maybePop(context);
-          }).wrapPadding(padding: EdgeInsets.only(left: widget.paddingStart)),
-          Container().expand(1),
+          GestureDetector(
+            onTap: () => Navigator.maybePop(context),
+            child: Image.asset(
+              Res.back,
+              height: 20.h,
+              width: 80.w,
+            ),
+          ),
+          const Spacer(),
           widget.actionMenu ?? Container()
         ],
       ),

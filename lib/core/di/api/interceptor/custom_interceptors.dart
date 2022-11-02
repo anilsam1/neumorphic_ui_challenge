@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
-import 'package:flutter_demo_structure/core/di/api/EncText.dart';
+import 'package:flutter_demo_structure/core/di/api/enc_text.dart';
 
 class CustomInterceptors extends Interceptor {
   @override
-  Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  Future onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     debugPrint("REQUEST[${options.method}] => PATH: ${options.path}");
     debugPrint("Headers: ${jsonEncode(options.headers)}");
     debugPrint("data: ${jsonEncode(options.data)}");
@@ -17,10 +18,11 @@ class CustomInterceptors extends Interceptor {
     options.headers["responseType"] = "text/plain";
     options.headers.putIfAbsent("api-key", () => appDB.apiKey);
 
-    if (appDB.token.isNotEmpty)
+    if (appDB.token.isNotEmpty) {
       options.headers['token'] = appDB.token;
-    else
+    } else {
       options.headers['token'] = "";
+    }
 
     debugPrint("Headers: ${jsonEncode(options.headers)}");
 
@@ -29,7 +31,8 @@ class CustomInterceptors extends Interceptor {
   }
 
   @override
-  Future onResponse(Response response, ResponseInterceptorHandler handler) async {
+  Future onResponse(
+      Response response, ResponseInterceptorHandler handler) async {
     debugPrint('RESPONSE[${response.statusCode}] => PATH: ${response.realUri}');
     response.data = enc.decrypt(response.data);
     debugPrint('RESPONSE[${response.statusCode}] => PATH: ${response.data}');
@@ -38,7 +41,8 @@ class CustomInterceptors extends Interceptor {
 
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    debugPrint('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
+    debugPrint(
+        'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
     return handler.next(err);
   }
 }

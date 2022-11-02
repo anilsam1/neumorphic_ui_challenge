@@ -16,10 +16,11 @@ class LYDPhoneValidator extends TextFieldValidator {
   // message when the value is empty.
 
   RegExp mobileRegex = RegExp(r"^(?:[+0]9)?[0-9]{10,12}$");
-  RegExp emailRegex =
-      RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  RegExp emailRegex = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
-  String emailPattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+  String emailPattern =
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
   String mobilePattern = r"^(?:[+0]9)?[0-9]{10,12}$";
 
   @override
@@ -27,18 +28,20 @@ class LYDPhoneValidator extends TextFieldValidator {
 
   @override
   bool isValid(String? value) {
-    if (value!.contains("@"))
+    if (value!.contains("@")) {
       return hasMatch(emailPattern, value);
-    else
+    } else {
       return hasMatch(mobilePattern, value);
+    }
   }
 
   @override
   String call(String? value) {
     if (value!.isEmpty) return errorText;
-    if (value.contains("@"))
+    if (value.contains("@")) {
       return emailInvalid;
-    else
+    } else {
       return mobileInvalid;
+    }
   }
 }

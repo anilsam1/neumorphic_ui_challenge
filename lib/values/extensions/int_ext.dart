@@ -23,12 +23,14 @@ extension IntX on int {
   /// ```
   Iterable<int> to(int end, {int by = 1}) {
     if (by < 1) {
-      throw ArgumentError('Invalid step size: $by. Step size must be greater than 0');
+      throw ArgumentError(
+          'Invalid step size: $by. Step size must be greater than 0');
     }
     final count = ((end - this).abs() / by).ceil();
     // Explicit type declaration required for function argument.
-    final int Function(int) generator =
-        this >= end ? (index) => this - (by * index) : (index) => this + (by * index);
+    final int Function(int) generator = this >= end
+        ? (index) => this - (by * index)
+        : (index) => this + (by * index);
     return Iterable<int>.generate(count, generator);
   }
 

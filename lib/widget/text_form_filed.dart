@@ -40,7 +40,7 @@ class AppTextField extends StatelessWidget {
   final BoxConstraints? suffixIconConstraints;
   final bool? isDense;
 
-  AppTextField({
+  const AppTextField({
     required this.label,
     required this.hint,
     this.error,
@@ -78,6 +78,7 @@ class AppTextField extends StatelessWidget {
     this.prefixIconConstraints,
     this.suffixIconConstraints,
     this.isDense,
+    super.key,
   });
 
   @override
@@ -98,7 +99,9 @@ class AppTextField extends StatelessWidget {
       maxLines: maxLines,
       style: textStyle,
       obscureText: obscureText,
-      validator: validators != null ? validators : (String? value) {},
+      validator: validators ?? (String? value) {
+              return null;
+            },
       keyboardType: keyboardType,
       textInputAction: keyboardAction,
       textCapitalization: textCapitalization,
@@ -108,7 +111,8 @@ class AppTextField extends StatelessWidget {
       maxLength: maxLength,
       decoration: decoration ??
           InputDecoration(
-            counterStyle: textMedium.copyWith(color: AppColor.accentColor.withOpacity(0.50)),
+            counterStyle: textMedium.copyWith(
+                color: AppColor.accentColor.withOpacity(0.50)),
             counterText: "",
             filled: filled,
             prefixText: prefixText,
@@ -128,10 +132,11 @@ class AppTextField extends StatelessWidget {
               color: AppColor.santasGray,
               fontSize: 15.sp,
             ),
-            errorStyle: textMedium.copyWith(color: AppColor.redColor),
+            errorStyle: textMedium.copyWith(color: AppColor.red),
             errorMaxLines: 2,
             alignLabelWithHint: true,
-            contentPadding: contentPadding ?? EdgeInsets.fromLTRB(12, 18, 12, 18),
+            contentPadding:
+                contentPadding ?? const EdgeInsets.fromLTRB(12, 18, 12, 18),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(kBorderRadius),
               borderSide: filled
@@ -154,8 +159,8 @@ class AppTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(kBorderRadius),
               borderSide: filled
                   ? BorderSide.none
-                  : BorderSide(
-                      color: AppColor.redColor,
+                  : const BorderSide(
+                      color: AppColor.red,
                       width: 1.0,
                     ),
             ),

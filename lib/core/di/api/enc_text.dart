@@ -5,7 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart' hide Key;
 
-import '../../locator.dart';
+import 'package:flutter_demo_structure/core/locator.dart';
 
 class EncText {
   final String aesKey;
@@ -24,20 +24,20 @@ class EncText {
     debugPrint("Digest as hex string: $hashKey");
 
     // copy first 32 bits of hash key to key
-    this.key = Key.fromUtf8("$hashKey".substring(0, 32));
+    key = Key.fromUtf8("$hashKey".substring(0, 32));
 
     // copy first 16 bits of plain key to iv
-    this.iv = IV.fromUtf8("$aesKey".substring(0, 16));
+    iv = IV.fromUtf8(aesKey.substring(0, 16));
 
-    Uint8List keyToBytes = Uint8List.fromList(this.key.bytes);
+    Uint8List keyToBytes = Uint8List.fromList(key.bytes);
     String keyInString = String.fromCharCodes(keyToBytes);
-    Uint8List ivToBytes = Uint8List.fromList(this.iv.bytes);
+    Uint8List ivToBytes = Uint8List.fromList(iv.bytes);
     String ivToString = String.fromCharCodes(ivToBytes);
     debugPrint("key in string $keyInString");
     debugPrint("iv in string $ivToString");
 
-    debugPrint("key ${this.key.bytes}");
-    debugPrint("iv ${this.iv.bytes}");
+    debugPrint("key ${key.bytes}");
+    debugPrint("iv ${iv.bytes}");
     var en = encrypt("text");
     var dn = decrypt(en);
 

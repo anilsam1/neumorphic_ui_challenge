@@ -1,11 +1,13 @@
 import 'dart:async';
 
-import 'package:catcher/catcher.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_demo_structure/core/navigation/navigation_service.dart';
-import 'package:flutter_demo_structure/model/user_profile_response.dart';
+import 'package:flutter_demo_structure/core/db/app_db.dart';
+import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
+import 'package:flutter_demo_structure/router/app_router.dart';
+import 'package:flutter_demo_structure/ui/auth/model/user_profile_response.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_demo_structure/values/string_constants.dart';
 import 'package:flutter_demo_structure/values/theme.dart';
@@ -13,10 +15,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_strategy/url_strategy.dart';
-
-import 'core/db/app_db.dart';
-import 'core/locator.dart';
-import 'core/navigation/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,71 +31,47 @@ Future<void> main() async {
 
   //await Firebase.initializeApp();
 
-  //setup catcher
-  CatcherOptions debugOptions = CatcherOptions(DialogReportMode(), [ConsoleHandler()]);
-
-  /// Release configuration. Same as above, but once user accepts dialog, user will be prompted to send email with crash to support.
-  CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
-    EmailManualHandler(["support@email.com"])
-  ]);
-
   // Fixing App Orientation.
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then(
     (value) => runZonedGuarded(() {
-      Catcher(
-        rootWidget: MyApp(),
-        debugConfig: debugOptions,
-        releaseConfig: releaseOptions,
-        navigatorKey: NavigationService.navigatorKey,
-      );
+      runApp(MyApp());
     }, (Object error, StackTrace stackTrace) {
       /// for debug:
       if (!kReleaseMode) {
         debugPrint('[Error]: ${error.toString()}');
         debugPrint('[Stacktrace]: ${stackTrace.toString()}');
-      } else {
-        Catcher.reportCheckedError(error, stackTrace);
-      }
+      } else {}
     }),
   );
 }
 
 class MyApp extends StatelessWidget {
+  final _appRouter = locator<AppRouter>();
+
+  MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      builder: () => MaterialApp(
+      builder: (context, child) => MaterialApp.router(
         title: StringConstant.appName,
         theme: appTheme,
         debugShowCheckedModeBanner: false,
-        navigatorKey: Catcher.navigatorKey,
         builder: (BuildContext context, Widget? widget) {
-          Catcher.addDefaultErrorWidget(
-            showStacktrace: true,
-            maxWidthForSmallMode: 150,
-          );
           return widget!;
         },
-        routes: Routes.route(),
-        onGenerateRoute: Routes.onGenerateRoute,
-        onUnknownRoute: Routes.onUnknownRoute,
-        initialRoute: RouteName.root,
+        routerDelegate: _appRouter.delegate(),
+        routeInformationParser: _appRouter.defaultRouteParser(),
+        localizationsDelegates: const [
+          S.delegate,
+        ],
+        supportedLocales: [
+          ...S.delegate.supportedLocales,
+        ],
       ),
     );
-  }
-}
-
-/*ScrollConfiguration(
-behavior: MyBehavior(),
-child: child,
-)*/
-
-class MyBehavior extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
   }
 }

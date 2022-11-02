@@ -33,15 +33,15 @@ class SlideFadeTransition extends StatefulWidget {
   final Duration animationDuration;
 
   const SlideFadeTransition({
-    Key? key,
+    required this.inverse,
     required this.child,
     this.offset = 0.2,
-    required this.inverse,
     this.curve = Curves.easeIn,
     this.direction = SwipeDirection.vertical,
     this.delayStart = const Duration(seconds: 0),
     this.animationDuration = const Duration(milliseconds: 800),
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _SlideFadeTransitionState createState() => _SlideFadeTransitionState();
@@ -75,23 +75,34 @@ class _SlideFadeTransitionState extends State<SlideFadeTransition>
     //configure the animation controller as per the direction
     if (widget.direction == SwipeDirection.vertical) {
       _animationSlide = Tween<Offset>(
-              begin: Offset(0, widget.inverse.value ? -widget.offset : widget.offset),
-              end: Offset(0, 0))
-          .animate(CurvedAnimation(
-        curve: widget.curve,
-        parent: _animationController,
-      ));
+              begin: Offset(
+                0,
+                widget.inverse.value ? -widget.offset : widget.offset,
+              ),
+              end: const Offset(0, 0))
+          .animate(
+        CurvedAnimation(
+          curve: widget.curve,
+          parent: _animationController,
+        ),
+      );
     } else {
       _animationSlide = Tween<Offset>(
-              begin: Offset(widget.inverse.value ? -widget.offset : widget.offset, 0),
-              end: Offset(0, 0))
-          .animate(CurvedAnimation(
-        curve: widget.curve,
-        parent: _animationController,
-      ));
+              begin: Offset(
+                widget.inverse.value ? -widget.offset : widget.offset,
+                0,
+              ),
+              end: const Offset(0, 0))
+          .animate(
+        CurvedAnimation(
+          curve: widget.curve,
+          parent: _animationController,
+        ),
+      );
     }
 
-    _animationFade = Tween<double>(begin: 0.5, end: 1.0).animate(CurvedAnimation(
+    _animationFade =
+        Tween<double>(begin: 0.5, end: 1.0).animate(CurvedAnimation(
       curve: widget.curve,
       parent: _animationController,
     ));
@@ -114,15 +125,16 @@ class _SlideFadeTransitionState extends State<SlideFadeTransition>
 
   @override
   void dispose() {
-    _timer?.cancel();
-    _animationController?.dispose();
+    _timer.cancel();
+    _animationController.dispose();
     super.dispose();
   }
 
   getAnimation() {
     return _animationSlide = Tween<Offset>(
-            begin: Offset(0, widget.inverse.value ? widget.offset : widget.offset),
-            end: Offset(0, 0))
+            begin:
+                Offset(0, widget.inverse.value ? widget.offset : widget.offset),
+            end: const Offset(0, 0))
         .animate(CurvedAnimation(
       curve: widget.curve,
       parent: _animationController,

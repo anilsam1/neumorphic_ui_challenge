@@ -1,17 +1,15 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/di/api/api_end_points.dart';
+import 'package:flutter_demo_structure/core/di/api/app_exceptions.dart';
+import 'package:flutter_demo_structure/core/di/api/dio_util_error.dart';
 import 'package:flutter_demo_structure/core/di/api/interceptor/custom_interceptors.dart';
 import 'package:flutter_demo_structure/core/di/api/interceptor/internet_interceptor.dart';
-import 'package:flutter_demo_structure/core/navigation/navigation_service.dart';
-import 'package:flutter_demo_structure/core/navigation/routes.dart';
+import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
-import 'app_exceptions.dart';
-import 'dio_util_error.dart';
 
 class HttpClient {
   late Dio _client;
@@ -52,13 +50,12 @@ class HttpClient {
     return responseJson;
   }
 
-  Future post(String url, {dynamic body}) async {
+  Future post(String url, {body}) async {
     var responseJson;
     try {
       final response = await _client.post<String>(
         url,
         data: body,
-        options: buildCacheOptions(Duration(minutes: 10)),
       );
       responseJson = returnResponse(response);
     } on DioError catch (e) {
@@ -67,7 +64,7 @@ class HttpClient {
     return responseJson;
   }
 
-  Future put(String url, {dynamic body}) async {
+  Future put(String url, {body}) async {
     var responseJson;
     try {
       final response = await _client.put(url, data: body);
@@ -79,7 +76,7 @@ class HttpClient {
     return responseJson;
   }
 
-  Future delete(String url, {dynamic body}) async {
+  Future delete(String url, {body}) async {
     var apiResponse;
     try {
       final response = await _client.delete(url);
@@ -120,7 +117,7 @@ class HttpClient {
         throw BadRequestException(response.data.toString());
       case 401:
       case 403:
-        navigator.pushNamedAndRemoveUntil(RouteName.loginPage);
+        locator<AppRouter>().replaceAll([const LoginRoute()]);
         throw UnauthorisedException(response.data.toString());
       case 500:
       default:

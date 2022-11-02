@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:images_picker/images_picker.dart';
 
@@ -16,7 +17,7 @@ class MediaPicker {
       pickType: PickType.image,
       quality: 0.8,
       maxSize: 800,
-      cropOpt: cropOption != null ? cropOption : null,
+      cropOpt: cropOption,
     );
   }
 
@@ -30,7 +31,7 @@ class MediaPicker {
       pickType: PickType.image,
       quality: 0.8,
       maxSize: 800,
-      cropOpt: cropOption != null ? cropOption : null,
+      cropOpt: cropOption,
     );
   }
 
@@ -74,14 +75,17 @@ class MediaPicker {
       return (await FilePicker.platform.pickFiles(
         type: fileType,
         allowMultiple: allowMultiple,
-        allowedExtensions:
-            (extension?.isNotEmpty ?? false) ? extension?.replaceAll(' ', '').split(',') : null,
+        allowedExtensions: (extension?.isNotEmpty ?? false)
+            ? extension?.replaceAll(' ', '').split(',')
+            : null,
       ))
           ?.files;
     } on PlatformException catch (e) {
-      print("Unsupported operation" + e.toString());
-    } catch (ex) {
-      print(ex);
+      debugPrint("Unsupported operation$e");
+    } catch (ex, st) {
+      debugPrint(ex.toString());
+      debugPrintStack(stackTrace: st);
     }
+    return null;
   }
 }

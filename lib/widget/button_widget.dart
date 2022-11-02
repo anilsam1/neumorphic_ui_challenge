@@ -3,18 +3,24 @@ import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppButton extends StatelessWidget {
-  String label;
-  VoidCallback callback;
-  double? elevation;
-  double? height;
-  double? radius;
-  double? padding;
-  bool buttonColor;
+  final String label;
+  final VoidCallback callback;
+  final double? elevation;
+  final double? height;
+  final double? radius;
+  final double? padding;
+  final bool buttonColor;
 
-  AppButton(this.label, this.callback,
-      {double elevation = 0.0, this.height, this.radius, this.padding, this.buttonColor = false}) {
-    this.elevation = elevation;
-  }
+  const AppButton(
+    this.label,
+    this.callback, {
+    super.key,
+    double this.elevation = 0.0,
+    this.height,
+    this.radius,
+    this.padding,
+    this.buttonColor = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +28,18 @@ class AppButton extends StatelessWidget {
       width: double.infinity,
       height: 60.h,
       child: MaterialButton(
-        elevation: this.elevation,
-        padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+        elevation: elevation,
+        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
         onPressed: callback,
-        child: Text(
-          label,
-          style: textMedium.copyWith(color: AppColor.primaryColor, fontSize: 16.sp),
-        ),
         color: buttonColor ? AppColor.white : AppColor.white,
         shape: RoundedRectangleBorder(
           side: BorderSide(color: AppColor.primaryColor, width: 2.w),
           borderRadius: BorderRadius.all(Radius.circular(radius ?? 10)),
+        ),
+        child: Text(
+          label,
+          style: textMedium.copyWith(
+              color: AppColor.primaryColor, fontSize: 16.sp),
         ),
       ),
     );

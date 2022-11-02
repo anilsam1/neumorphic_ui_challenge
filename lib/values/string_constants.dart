@@ -55,7 +55,8 @@ class StringConstant {
   static const String tNc = 'Terms & Conditions';
   static const String and = ' and ';
   static const String privacyPolicy = 'Privacy Policy.';
-  static const String passwordMismatch = 'Password and Confirm password not match';
+  static const String passwordMismatch =
+      'Password and Confirm password not match';
   static const String acceptTnC = 'Please accept $tNc $and $privacyPolicy';
 
   //home

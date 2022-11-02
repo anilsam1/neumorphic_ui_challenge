@@ -1,14 +1,12 @@
 import 'dart:io';
 
-import 'package:catcher/catcher.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
-import 'package:flutter_demo_structure/core/navigation/navigation_service.dart';
-import 'package:flutter_demo_structure/core/navigation/routes.dart';
+import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/util/media_picker.dart';
 import 'package:flutter_demo_structure/util/permission_utils.dart';
-import 'package:flutter_demo_structure/util/utils.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_demo_structure/values/string_constants.dart';
 import 'package:flutter_demo_structure/widget/image_picker_dialog.dart';
@@ -16,15 +14,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:images_picker/images_picker.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin, MediaPickerListener {
+class _HomePageState extends State<HomePage>
+    with TickerProviderStateMixin, MediaPickerListener {
   ValueNotifier showLoading = ValueNotifier<bool>(false);
-  var style = TextButton.styleFrom(minimumSize: Size(double.maxFinite, 20));
+  var style =
+      TextButton.styleFrom(minimumSize: const Size(double.maxFinite, 20));
   int? count;
   List<Media?>? pickedFilesList;
   List<PlatformFile>? pickedDocuments;
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Medi
                 StringConstant.home,
                 style: textBold.copyWith(fontSize: 30.sp),
               ),
-              25.0.VBox,
+              25.0.verticalSpace,
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Medi
                       "Picked file count: $count",
                       style: textBold,
                     ),
-                  10.0.VBox,
+                  10.0.verticalSpace,
                   if (pickedFilesList != null)
                     Wrap(
                         direction: Axis.horizontal,
@@ -78,88 +78,95 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Medi
                                       width: 100,
                                       fit: BoxFit.cover,
                                     )
-                                  : SizedBox.shrink(),
+                                  : const SizedBox.shrink(),
                             )
                             .toList()),
-                  if (pickedDocuments != null && type == FilesType.Audio ||
-                      type == FilesType.Documents)
+                  if (pickedDocuments != null && type == FilesType.audio ||
+                      type == FilesType.documents)
                     Wrap(
-                        direction: Axis.horizontal,
-                        children: pickedDocuments!
-                            .map(
-                              (e) => Image.file(
-                                File(e.path!),
-                                height: 100,
-                                width: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            )
-                            .toList())
+                      direction: Axis.horizontal,
+                      children: pickedDocuments!
+                          .map(
+                            (e) => Image.file(
+                              File(e.path!),
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                          .toList(),
+                    )
                 ],
               ),
-              25.0.VBox,
+              25.0.verticalSpace,
               Column(
                 children: [
                   Row(
                     children: [
                       Expanded(
                         child: TextButton(
-                          onPressed: () => pickFile(FilesType.Image),
-                          child: Text(StringConstant.pickImage),
+                          onPressed: () => pickFile(FilesType.image),
                           style: style,
+                          child: const Text(StringConstant.pickImage),
                         ),
                       ),
                       Expanded(
                         child: TextButton(
-                          onPressed: () => pickFile(FilesType.Video),
-                          child: Text(StringConstant.pickVideo),
+                          onPressed: () => pickFile(FilesType.video),
                           style: style,
+                          child: const Text(StringConstant.pickVideo),
                         ),
                       ),
                     ],
                   ),
-                  10.0.VBox,
+                  10.0.verticalSpace,
                   Row(
                     children: [
                       Expanded(
                         child: TextButton(
-                          onPressed: () => pickFile(FilesType.Documents),
-                          child: Text(StringConstant.pickDocuments),
+                          onPressed: () => pickFile(FilesType.documents),
                           style: style,
+                          child: const Text(StringConstant.pickDocuments),
                         ),
                       ),
                       Expanded(
                         child: TextButton(
-                          onPressed: () => pickFile(FilesType.Audio),
-                          child: Text(StringConstant.pickAudio),
+                          onPressed: () => pickFile(FilesType.audio),
                           style: style,
+                          child: const Text(StringConstant.pickAudio),
                         ),
                       ),
                     ],
                   ),
-                  20.0.VBox,
-                  TextButton(
-                    onPressed: () => Catcher.sendTestException(),
-                    child: Text(
-                      StringConstant.sendException,
-                      textAlign: TextAlign.center,
-                      style: textBold,
-                    ),
-                    style: style,
-                  ),
+                  20.0.verticalSpace,
                 ],
               ),
-              25.0.VBox,
+              25.0.verticalSpace,
               Column(
                 children: [
                   TextButton(
-                    child: Text('Photo Permission'),
+                    child: const Text('Photo Permission'),
                     onPressed: () async {
                       await PhotosPermission().request(
-                        onPermanentlyDenied: () => Utils.showMessage(
-                            'Permission denied always user need to allow manually'),
-                        onGranted: () => Utils.showMessage('User Allowed to access photos'),
-                        onPermissionDenied: () => Utils.showMessage('User Denied to access photos'),
+                        onPermanentlyDenied: () =>
+                            ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Permission denied always user need to allow manually'),
+                          ),
+                        ),
+                        onGranted: () =>
+                            ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('User Allowed to access photos'),
+                          ),
+                        ),
+                        onPermissionDenied: () =>
+                            ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('User Denied to access photos'),
+                          ),
+                        ),
                       );
                     },
                   )
@@ -168,16 +175,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Medi
               TextButton(
                 onPressed: () {
                   appDB.logout();
-                  navigator.pushNamedAndRemoveUntil(RouteName.loginPage);
+                  locator<AppRouter>().replaceAll([const LoginRoute()]);
                 },
+                style: TextButton.styleFrom(backgroundColor: Colors.grey),
                 child: Text(
                   StringConstant.logout,
                   style: textBold,
                 ),
-                style: TextButton.styleFrom(backgroundColor: Colors.grey),
               )
             ],
-          ).wrapPaddingHorizontal(20.0),
+          ),
         ),
       ),
     );
@@ -190,27 +197,28 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Medi
       this.type = null;
     });
     switch (type) {
-      case FilesType.Image:
+      case FilesType.image:
         pickedFilesList = _mediaPickerHandler.showDialog(
           context,
-          PickFileType.IMAGE,
+          PickFileType.image,
           maxPickFileCount: 5,
           cropOption: CropOption(aspectRatio: CropAspectRatio.wh16x9),
         );
         break;
-      case FilesType.Video:
+      case FilesType.video:
         pickedFilesList = _mediaPickerHandler.showDialog(
           context,
-          PickFileType.VIDEO,
+          PickFileType.video,
           maxPickFileCount: 5,
         );
         break;
-      case FilesType.Documents:
-        pickedDocuments = await MediaPicker.pickDocument(fileType: FileType.any);
-        break;
-      case FilesType.Audio:
+      case FilesType.documents:
         pickedDocuments =
-            await MediaPicker.pickDocument(fileType: FileType.audio, allowMultiple: true);
+            await MediaPicker.pickDocument(fileType: FileType.any);
+        break;
+      case FilesType.audio:
+        pickedDocuments = await MediaPicker.pickDocument(
+            fileType: FileType.audio, allowMultiple: true);
         break;
     }
     if (pickedFilesList != null) {
@@ -222,17 +230,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Medi
   }
 
   @override
-  pickedFiles(List<Media?>? _pickedFilesList, PickFileType _pickFileType) {
-    print('Requested Media type $_pickFileType');
-    if (_pickedFilesList != null) {
-      if (mounted)
+  pickedFiles(List<Media?>? pickedFilesList, PickFileType pickFileType) {
+    debugPrint('Requested Media type $pickFileType');
+    if (pickedFilesList != null) {
+      if (mounted) {
         setState(() => {
-              count = _pickedFilesList.length,
-              pickedFilesList = _pickedFilesList,
+              count = pickedFilesList?.length,
+              pickedFilesList = pickedFilesList,
             });
+      }
     }
   }
 }
 
 /// this enum only for identify pick type in real case we can directly call media picker
-enum FilesType { Image, Video, Documents, Audio }
+enum FilesType { image, video, documents, audio }

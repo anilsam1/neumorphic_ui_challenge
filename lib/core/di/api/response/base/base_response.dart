@@ -4,13 +4,13 @@ class BaseResponse<T> {
   var data;
 
   parseJson(Map<String, dynamic> json, fromJson) {
-    this.message = json['message'];
-    this.code = json['code'];
+    message = json['message'];
+    code = json['code'];
     var data = json['data'];
     if (data != null) {
       if (data is Map<String, dynamic> && data["code"] == "0") {
         String error = json['message'];
-        this.message = error;
+        message = error;
       } else if (data is Map<String, dynamic>) {
         this.data = fromJson(data);
       } else if (data is List) {
@@ -27,12 +27,12 @@ class BaseResponse<T> {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['code'] = this.code;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['code'] = code;
+    data['message'] = message;
     if (data is List) {
       data['data'] = this.data.map((v) => dataModel.toJson()).toList();
-    } else if (data is Map<String, dynamic>) {
+    } else {
       this.data = dataModel.toJson();
     }
     return data;

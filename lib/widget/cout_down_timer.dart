@@ -2,23 +2,24 @@ import 'package:flutter/material.dart';
 
 class CountDownTimer extends StatefulWidget {
   const CountDownTimer({
-    Key? key,
+    super.key,
     required int secondsRemaining,
     required this.countDownTimerStyle,
     required this.whenTimeExpires,
     required this.countDownFormatter,
-  })  : secondsRemaining = secondsRemaining,
-        super(key: key);
+  })  : secondsRemaining = secondsRemaining;
 
   final int secondsRemaining;
   final Function whenTimeExpires;
   final Function countDownFormatter;
   final TextStyle countDownTimerStyle;
 
+  @override
   State createState() => _CountDownTimerState();
 }
 
-class _CountDownTimerState extends State<CountDownTimer> with TickerProviderStateMixin {
+class _CountDownTimerState extends State<CountDownTimer>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Duration duration;
 
@@ -41,7 +42,8 @@ class _CountDownTimerState extends State<CountDownTimer> with TickerProviderStat
     );
     _controller.reverse(from: widget.secondsRemaining.toDouble());
     _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed || status == AnimationStatus.dismissed) {
+      if (status == AnimationStatus.completed ||
+          status == AnimationStatus.dismissed) {
         widget.whenTimeExpires();
       }
     });

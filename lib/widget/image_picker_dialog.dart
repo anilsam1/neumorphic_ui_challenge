@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/util/media_picker.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/values/string_constants.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:images_picker/images_picker.dart';
 
 @immutable
@@ -84,7 +85,7 @@ class MediaPickerDialog extends StatelessWidget {
               GestureDetector(
                 onTap: () => listener.openCamera(),
                 child: roundedButton(
-                  StringConstant.camera,
+                  S.current.camera,
                   const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                   AppColor.primaryColor,
                   AppColor.white,
@@ -93,7 +94,7 @@ class MediaPickerDialog extends StatelessWidget {
               GestureDetector(
                 onTap: () => listener.openGallery(),
                 child: roundedButton(
-                  StringConstant.gallery,
+                  S.current.gallery,
                   const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                   AppColor.primaryColor,
                   AppColor.white,
@@ -106,7 +107,7 @@ class MediaPickerDialog extends StatelessWidget {
                   padding: const EdgeInsets.only(
                       left: 30, top: 0.0, right: 30, bottom: 20),
                   child: roundedButton(
-                    StringConstant.cancel,
+                    S.current.cancel,
                     const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                     AppColor.primaryColor,
                     AppColor.white,

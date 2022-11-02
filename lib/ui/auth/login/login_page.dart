@@ -3,12 +3,12 @@ import 'package:flutter_demo_structure/core/db/app_db.dart';
 import 'package:flutter_demo_structure/core/di/api/req_params.dart' as Req;
 import 'package:flutter_demo_structure/core/di/api/response/api_base/api_base.dart';
 import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/ui/auth/login/sign_up_widget.dart';
 import 'package:flutter_demo_structure/ui/auth/login/store/login_store.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/values/string_constants.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
 import 'package:flutter_demo_structure/widget/text_form_filed.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         10.0.verticalSpace,
         Text(
-          StringConstant.welcomeBack.toUpperCase(),
+          S.current.welcomeBack.toUpperCase(),
           style: textBold.copyWith(
             color: AppColor.primaryColor,
             fontSize: 28.sp,
@@ -138,8 +138,8 @@ class _LoginPageState extends State<LoginPage> {
             25.0.verticalSpace,
             AppTextField(
               controller: emailController,
-              label: StringConstant.email,
-              hint: StringConstant.email,
+              label: S.current.email,
+              hint: S.current.email,
               keyboardType: TextInputType.emailAddress,
               validators: emailValidator,
               focusNode: emailNode,
@@ -155,8 +155,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             10.0.verticalSpace,
             AppTextField(
-              label: StringConstant.password,
-              hint: StringConstant.password,
+              label: S.current.password,
+              hint: S.current.password,
               obscureText: _isHidden,
               validators: passwordValidator,
               controller: passwordController,
@@ -174,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                     passwordNode.unfocus();
                   }),
                   child: Text(
-                    StringConstant.forgot,
+                    S.current.forgot,
                     style: textMedium.copyWith(
                       color: AppColor.brownColor,
                       fontSize: 14.0.sp,
@@ -194,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             16.0.verticalSpace,
             AppButtonInverse(
-              StringConstant.logIn.toUpperCase(),
+              S.current.logIn.toUpperCase(),
               () {
                 if (_formKey.currentState!.validate()) {
                   loginAndNavigateToHome();

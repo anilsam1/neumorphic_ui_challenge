@@ -369,7 +369,7 @@ packages:
       name: flutter_facebook_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0+2"
+    version: "5.0.1"
   flutter_facebook_auth_platform_interface:
     dependency: transitive
     description:
@@ -465,7 +465,7 @@ packages:
       name: flutter_web_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.1"
+    version: "0.4.2"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -712,10 +712,12 @@ packages:
   mobx_codegen:
     dependency: "direct dev"
     description:
-      name: mobx_codegen
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.7+3"
+      path: mobx_codegen
+      ref: "99e7571f8f4482381402c4c25d90586cdd5cbbfd"
+      resolved-ref: "99e7571f8f4482381402c4c25d90586cdd5cbbfd"
+      url: "https://github.com/amondnet/mobx.dart"
+    source: git
+    version: "2.1.0"
   nm:
     dependency: transitive
     description:
@@ -757,7 +759,7 @@ packages:
       name: path_provider_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.20"
+    version: "2.0.21"
   path_provider_ios:
     dependency: transitive
     description:
@@ -918,7 +920,7 @@ packages:
       name: share_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.0"
+    version: "6.2.0"
   share_plus_platform_interface:
     dependency: transitive
     description:
@@ -993,7 +995,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0+2"
+    version: "2.2.0+3"
   sqflite_common:
     dependency: transitive
     description:

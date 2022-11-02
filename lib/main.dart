@@ -9,7 +9,7 @@ import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/ui/auth/model/user_profile_response.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/values/string_constants.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/values/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       builder: (context, child) => MaterialApp.router(
-        title: StringConstant.appName,
+        title: S.current.appName,
         theme: appTheme,
         debugShowCheckedModeBanner: false,
         builder: (BuildContext context, Widget? widget) {

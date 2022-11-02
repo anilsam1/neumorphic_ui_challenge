@@ -88,5 +88,6 @@
   "privacyPolicy": "Privacy Policy.",
   "passwordMismatch": "Password and Confirm password not match",
   "acceptTnC": "Please accept $tNc $and $privacyPolicy",
-  "home": "Home"
+  "home": "Home",
+  "dashboard": "Dashboard"
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_structure/values/string_constants.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
 
 class PaymentCard {
   CardType? type;
@@ -39,7 +39,7 @@ enum CardType {
 class CardUtils {
   static String? validateCVV(String? value) {
     if (value == null || value.isEmpty) {
-      return StringConstant.enterCvv;
+      return S.current.enterCvv;
     }
 
     if (value.length < 3 || value.length > 4) {
@@ -50,7 +50,7 @@ class CardUtils {
 
   static String? validateDate(String? value) {
     if (value == null || value.isEmpty) {
-      return StringConstant.enterExpiryDate;
+      return S.current.enterExpiryDate;
     }
 
     int year;
@@ -191,13 +191,13 @@ class CardUtils {
   /// https://en.wikipedia.org/wiki/Luhn_algorithm
   static String? validateCardNum(String? input) {
     if (input == null || input.isEmpty) {
-      return StringConstant.enterCardNumber;
+      return S.current.enterCardNumber;
     }
 
     input = getCleanedNumber(input);
 
     if (input.length < 8) {
-      return StringConstant.numberIsInvalid;
+      return S.current.numberIsInvalid;
     }
 
     int sum = 0;
@@ -217,7 +217,7 @@ class CardUtils {
       return null;
     }
 
-    return StringConstant.numberIsInvalid;
+    return S.current.numberIsInvalid;
   }
 
   static CardType getCardTypeFrmNumber(String input) {

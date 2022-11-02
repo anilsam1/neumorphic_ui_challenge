@@ -4,11 +4,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
 import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/util/media_picker.dart';
 import 'package:flutter_demo_structure/util/permission_utils.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/values/string_constants.dart';
 import 'package:flutter_demo_structure/widget/image_picker_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:images_picker/images_picker.dart';
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage>
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                StringConstant.home,
+                S.current.home,
                 style: textBold.copyWith(fontSize: 30.sp),
               ),
               25.0.verticalSpace,
@@ -107,14 +107,14 @@ class _HomePageState extends State<HomePage>
                         child: TextButton(
                           onPressed: () => pickFile(FilesType.image),
                           style: style,
-                          child: const Text(StringConstant.pickImage),
+                          child: Text(S.current.pickImage),
                         ),
                       ),
                       Expanded(
                         child: TextButton(
                           onPressed: () => pickFile(FilesType.video),
                           style: style,
-                          child: const Text(StringConstant.pickVideo),
+                          child: Text(S.current.pickVideo),
                         ),
                       ),
                     ],
@@ -126,14 +126,14 @@ class _HomePageState extends State<HomePage>
                         child: TextButton(
                           onPressed: () => pickFile(FilesType.documents),
                           style: style,
-                          child: const Text(StringConstant.pickDocuments),
+                          child: Text(S.current.pickDocuments),
                         ),
                       ),
                       Expanded(
                         child: TextButton(
                           onPressed: () => pickFile(FilesType.audio),
                           style: style,
-                          child: const Text(StringConstant.pickAudio),
+                          child: Text(S.current.pickAudio),
                         ),
                       ),
                     ],
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage>
                 },
                 style: TextButton.styleFrom(backgroundColor: Colors.grey),
                 child: Text(
-                  StringConstant.logout,
+                  S.current.logout,
                   style: textBold,
                 ),
               )

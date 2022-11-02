@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/values/string_constants.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignUpWidget extends StatelessWidget {
@@ -37,8 +37,8 @@ class SignUpWidget extends StatelessWidget {
             4.0.verticalSpace,
             Text(
               fromLogin
-                  ? StringConstant.dontHaveAccount
-                  : StringConstant.alreadyHaveAccount,
+                  ? S.current.dontHaveAccount
+                  : S.current.alreadyHaveAccount,
               style: textMedium.copyWith(
                 color: AppColor.brownColor,
                 fontSize: 16.sp,
@@ -47,8 +47,8 @@ class SignUpWidget extends StatelessWidget {
             4.0.verticalSpace,
             Text(
               fromLogin
-                  ? StringConstant.signUp.toUpperCase()
-                  : StringConstant.login.toUpperCase(),
+                  ? S.current.signUp.toUpperCase()
+                  : S.current.login.toUpperCase(),
               style: textBold.copyWith(
                 color: AppColor.primaryColor,
                 fontSize: 20.sp,

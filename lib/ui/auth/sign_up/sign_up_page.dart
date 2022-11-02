@@ -4,11 +4,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/ui/auth/login/sign_up_widget.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/values/string_constants.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
 import 'package:flutter_demo_structure/widget/text_form_filed.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -95,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
       children: [
         10.0.verticalSpace,
         Text(
-          StringConstant.signUp.toUpperCase(),
+          S.current.signUp.toUpperCase(),
           style: textBold.copyWith(
             color: AppColor.primaryColor,
             fontSize: 24.sp,
@@ -103,7 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         10.0.verticalSpace,
         Text(
-          StringConstant.fillDetails,
+          S.current.fillDetails,
           style: textLight.copyWith(
             color: AppColor.primaryColor,
           ),
@@ -121,8 +121,8 @@ class _SignUpPageState extends State<SignUpPage> {
             25.0.verticalSpace,
             AppTextField(
               controller: nameController,
-              label: StringConstant.name,
-              hint: StringConstant.name,
+              label: S.current.name,
+              hint: S.current.name,
               keyboardType: TextInputType.name,
               textCapitalization: TextCapitalization.sentences,
               validators: nameValidator,
@@ -139,8 +139,8 @@ class _SignUpPageState extends State<SignUpPage> {
             10.0.verticalSpace,
             AppTextField(
               controller: emailController,
-              label: StringConstant.email,
-              hint: StringConstant.email,
+              label: S.current.email,
+              hint: S.current.email,
               keyboardType: TextInputType.emailAddress,
               validators: emailValidator,
               prefixIcon: IconButton(
@@ -156,8 +156,8 @@ class _SignUpPageState extends State<SignUpPage> {
             10.0.verticalSpace,
             AppTextField(
               controller: mobileController,
-              label: StringConstant.mobNumber,
-              hint: StringConstant.mobNumber,
+              label: S.current.mobNumber,
+              hint: S.current.mobNumber,
               keyboardType: TextInputType.phone,
               validators: mobileValidator,
               focusNode: mobileNode,
@@ -214,8 +214,8 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             10.0.verticalSpace,
             AppTextField(
-              label: StringConstant.password,
-              hint: StringConstant.password,
+              label: S.current.password,
+              hint: S.current.password,
               obscureText: _isHidden,
               validators: passwordValidator,
               controller: passwordController,
@@ -235,8 +235,8 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             10.0.verticalSpace,
             AppTextField(
-              label: StringConstant.confPassword,
-              hint: StringConstant.confPassword,
+              label: S.current.confPassword,
+              hint: S.current.confPassword,
               obscureText: _isHidden,
               validators: confPasswordValidator,
               controller: confPasswordController,
@@ -279,38 +279,37 @@ class _SignUpPageState extends State<SignUpPage> {
                   Expanded(
                     child: RichText(
                       text: TextSpan(
-                        text: StringConstant.iAgree,
+                        text: S.current.iAgree,
                         style: textLight.copyWith(
                           color: AppColor.grey,
                           fontSize: 14.sp,
                         ),
                         children: <InlineSpan>[
                           TextSpan(
-                            text: StringConstant.tNc,
+                            text: S.current.tNc,
                             style: textSemiBold.copyWith(
                               fontSize: 14.sp,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(StringConstant.tNc)));
+                                    SnackBar(content: Text(S.current.tNc)));
                               },
                           ),
-                          const TextSpan(
-                            text: StringConstant.and,
+                          TextSpan(
+                            text: S.current.and,
                           ),
                           TextSpan(
-                            text: StringConstant.privacyPolicy,
+                            text: S.current.privacyPolicy,
                             style: textSemiBold.copyWith(
                               fontSize: 14.sp,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            StringConstant.privacyPolicy)));
+                                    SnackBar(
+                                        content:
+                                            Text(S.current.privacyPolicy)));
                               },
                           ),
                         ],
@@ -322,20 +321,20 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             18.0.verticalSpace,
             AppButtonInverse(
-              StringConstant.signUp.toUpperCase(),
+              S.current.signUp.toUpperCase(),
               () {
                 //navigator.pushNamed(RouteName.otpVerificationPage);
                 if (_formKey.currentState!.validate()) {
                   if (passwordController.text.trim() !=
                       confPasswordController.text.trim()) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(StringConstant.passwordMismatch)));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(S.current.passwordMismatch)));
 
                     return;
                   }
                   if (!_isRead.value) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(StringConstant.acceptTnC)));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(S.current.acceptTnC)));
 
                     return;
                   }

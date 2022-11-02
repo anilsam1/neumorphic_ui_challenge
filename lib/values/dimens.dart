@@ -1,9 +1,9 @@
 //MARGIN
-final double margin = 16.0;
-final double fieldSpace = 8;
+const double margin = 16.0;
+const double fieldSpace = 8;
 const double spacingStander = 16.0;
-const double spcingcontrol = 12.0;
-const double spacingstandrcontrol = 8.0;
+const double spacingControl = 12.0;
+const double spacingStandardControl = 8.0;
 const double buttonHeight = 60.0;
 const double cardCircularRadius = 12.0;
 const double panelHeightClosed = 72.0;

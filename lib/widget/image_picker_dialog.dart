@@ -6,12 +6,17 @@ import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_demo_structure/values/string_constants.dart';
 import 'package:images_picker/images_picker.dart';
 
+@immutable
 class MediaPickerDialog extends StatelessWidget {
   final MediaPickerHandler listener;
   final AnimationController controller;
   late BuildContext context;
 
-  MediaPickerDialog(this.listener, this.controller);
+  MediaPickerDialog(
+    this.listener,
+    this.controller, {
+    super.key,
+  });
 
   late Animation<double> _drawerContentsOpacity;
   late Animation<Offset> _drawerDetailsPosition;
@@ -30,7 +35,7 @@ class MediaPickerDialog extends StatelessWidget {
     ));
   }
 
-  getImage(BuildContext context) {
+  void getImage(BuildContext context) {
     controller.forward();
     showDialog(
       context: context,
@@ -44,14 +49,13 @@ class MediaPickerDialog extends StatelessWidget {
     );
   }
 
-  @override
   void dispose() {
     controller.dispose();
   }
 
   startTime() async {
-    var _duration = Duration(milliseconds: 200);
-    return Timer(_duration, navigationPage);
+    var duration = const Duration(milliseconds: 200);
+    return Timer(duration, navigationPage);
   }
 
   void navigationPage() {
@@ -71,7 +75,8 @@ class MediaPickerDialog extends StatelessWidget {
       child: Opacity(
         opacity: 1.0,
         child: Container(
-          padding: EdgeInsets.only(left: 30, top: 0.0, right: 30, bottom: 20),
+          padding:
+              const EdgeInsets.only(left: 30, top: 0.0, right: 30, bottom: 20),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -80,7 +85,7 @@ class MediaPickerDialog extends StatelessWidget {
                 onTap: () => listener.openCamera(),
                 child: roundedButton(
                   StringConstant.camera,
-                  EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                  const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                   AppColor.primaryColor,
                   AppColor.white,
                 ),
@@ -89,7 +94,7 @@ class MediaPickerDialog extends StatelessWidget {
                 onTap: () => listener.openGallery(),
                 child: roundedButton(
                   StringConstant.gallery,
-                  EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                  const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                   AppColor.primaryColor,
                   AppColor.white,
                 ),
@@ -98,10 +103,11 @@ class MediaPickerDialog extends StatelessWidget {
               GestureDetector(
                 onTap: () => dismissDialog(),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 30, top: 0.0, right: 30, bottom: 20),
+                  padding: const EdgeInsets.only(
+                      left: 30, top: 0.0, right: 30, bottom: 20),
                   child: roundedButton(
                     StringConstant.cancel,
-                    EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                    const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                     AppColor.primaryColor,
                     AppColor.white,
                   ),
@@ -114,22 +120,27 @@ class MediaPickerDialog extends StatelessWidget {
     );
   }
 
-  Widget roundedButton(String buttonLabel, EdgeInsets margin, Color bgColor, Color textColor) {
+  Widget roundedButton(
+    String buttonLabel,
+    EdgeInsets margin,
+    Color bgColor,
+    Color textColor,
+  ) {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: margin,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 10,
         bottom: 10,
       ),
       alignment: FractionalOffset.center,
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.all(const Radius.circular(100.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(100.0)),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: AppColor.primaryColor.withOpacity(0.5),
-            offset: Offset(0.5, 2.0),
+            offset: const Offset(0.5, 2.0),
             blurRadius: 0.001,
           ),
         ],
@@ -144,39 +155,41 @@ class MediaPickerDialog extends StatelessWidget {
 
 class MediaPickerHandler {
   late MediaPickerDialog imagePicker;
-  late AnimationController _controller;
-  late MediaPickerListener _listener;
+  late AnimationController controller;
+  late MediaPickerListener listener;
   late PickFileType _pickFileType;
   int _maxPickFileCount = 1;
   CropOption? _cropOption;
 
-  MediaPickerHandler(this._listener, this._controller);
+  MediaPickerHandler(this.listener, this.controller);
 
   openCamera() async {
     imagePicker.dismissDialog();
     List<Media?>? pickedFiles;
-    if (_pickFileType == PickFileType.IMAGE) {
-      pickedFiles = await MediaPicker.pickImageFromCamera(cropOption: _cropOption);
+    if (_pickFileType == PickFileType.image) {
+      pickedFiles =
+          await MediaPicker.pickImageFromCamera(cropOption: _cropOption);
     } else {
       pickedFiles = await MediaPicker.pickVideoFromCamera();
     }
-    _listener.pickedFiles(pickedFiles, _pickFileType);
+    listener.pickedFiles(pickedFiles, _pickFileType);
   }
 
   openGallery() async {
     imagePicker.dismissDialog();
     List<Media?>? pickedFiles;
-    if (_pickFileType == PickFileType.IMAGE) {
+    if (_pickFileType == PickFileType.image) {
       pickedFiles = await MediaPicker.pickImageFromGallery(
           maxPickFileCount: _maxPickFileCount, cropOption: _cropOption);
     } else {
-      pickedFiles = await MediaPicker.pickVideoFromGallery(maxPickFileCount: _maxPickFileCount);
+      pickedFiles = await MediaPicker.pickVideoFromGallery(
+          maxPickFileCount: _maxPickFileCount);
     }
-    _listener.pickedFiles(pickedFiles, _pickFileType);
+    listener.pickedFiles(pickedFiles, _pickFileType);
   }
 
   void init() {
-    imagePicker = MediaPickerDialog(this, _controller);
+    imagePicker = MediaPickerDialog(this, controller);
     imagePicker.initState();
   }
 
@@ -186,15 +199,15 @@ class MediaPickerHandler {
     int maxPickFileCount = 1,
     CropOption? cropOption,
   }) {
-    this._pickFileType = pickFileType;
-    this._cropOption = cropOption;
-    this._maxPickFileCount = maxPickFileCount;
+    _pickFileType = pickFileType;
+    _cropOption = cropOption;
+    _maxPickFileCount = maxPickFileCount;
     imagePicker.getImage(context);
   }
 }
 
 abstract class MediaPickerListener {
-  pickedFiles(List<Media?>? _pickedFilesList, PickFileType pickFileType);
+  pickedFiles(List<Media?>? pickedFilesList, PickFileType pickFileType);
 }
 
-enum PickFileType { IMAGE, VIDEO }
+enum PickFileType { image, video }

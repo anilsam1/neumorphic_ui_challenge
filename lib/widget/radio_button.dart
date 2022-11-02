@@ -1,13 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RadioButton<T> extends StatelessWidget {
-  RadioButton({
-    Key? key,
+  const RadioButton({
     required this.value,
     required this.caption,
     required this.groupValue,
@@ -15,11 +11,10 @@ class RadioButton<T> extends StatelessWidget {
     this.width,
     this.height,
     this.decoration,
+    super.key,
   })  : assert(value != null),
-        assert(caption != null),
         assert(groupValue != null),
-        assert(onChanged != null),
-        super(key: key);
+        assert(onChanged != null);
 
   final T value;
   final T groupValue;
@@ -42,16 +37,16 @@ class RadioButton<T> extends StatelessWidget {
         decoration: decoration ??
             BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: value == groupValue ? AppColor.primaryColor : AppColor.colorHint,
+              color: value == groupValue
+                  ? AppColor.primaryColor
+                  : AppColor.colorHint,
             ),
         child: Center(
           child: Text(
             caption,
             textAlign: TextAlign.center,
-            style: Theme.of(context)
-                .textTheme
-                .button!
-                .copyWith(color: value == groupValue ? Colors.white : Colors.red),
+            style: Theme.of(context).textTheme.button!.copyWith(
+                color: value == groupValue ? Colors.white : Colors.red),
           ),
         ),
       ),

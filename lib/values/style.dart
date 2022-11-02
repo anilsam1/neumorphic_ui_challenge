@@ -1,33 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-final textLight = TextStyle(
+final TextStyle textThin = TextStyle(
+  decoration: TextDecoration.none,
+  fontWeight: FontWeight.w100,
+  fontSize: 16.sm,
+  color: AppColor.black,
+);
+final TextStyle textExtraLight = TextStyle(
+  decoration: TextDecoration.none,
+  fontWeight: FontWeight.w200,
+  fontSize: 16.sm,
+  color: AppColor.black,
+  overflow: TextOverflow.ellipsis,
+);
+final TextStyle textLight = TextStyle(
   decoration: TextDecoration.none,
   fontWeight: FontWeight.w300,
-  fontSize: 16.sp,
-  color: Colors.black,
+  fontSize: 16.sm,
+  color: AppColor.black,
+  overflow: TextOverflow.ellipsis,
 );
-final textRegular = TextStyle(
+final TextStyle textRegular = TextStyle(
   decoration: TextDecoration.none,
   fontWeight: FontWeight.w400,
-  fontSize: 16.sp,
-  color: Colors.black,
+  fontSize: 16.sm,
+  color: AppColor.black,
+  overflow: TextOverflow.ellipsis,
 );
-final textMedium = TextStyle(
+final TextStyle textMedium = TextStyle(
   decoration: TextDecoration.none,
   fontWeight: FontWeight.w500,
-  fontSize: 16.sp,
-  color: Colors.black,
+  fontSize: 16.sm,
+  overflow: TextOverflow.ellipsis,
 );
-final textSemiBold = TextStyle(
+final TextStyle textSemiBold = TextStyle(
   decoration: TextDecoration.none,
   fontWeight: FontWeight.w600,
-  fontSize: 16.sp,
-  color: Colors.black,
+  fontSize: 16.sm,
+  overflow: TextOverflow.ellipsis,
 );
-final textBold = TextStyle(
+final TextStyle textBold = TextStyle(
   decoration: TextDecoration.none,
   fontWeight: FontWeight.w700,
-  fontSize: 16.sp,
-  color: Colors.black,
+  fontSize: 16.sm,
+  overflow: TextOverflow.ellipsis,
+);
+final TextStyle textExtraBold = TextStyle(
+  decoration: TextDecoration.none,
+  fontWeight: FontWeight.w800,
+  fontSize: 16.sm,
+  overflow: TextOverflow.ellipsis,
+);
+final TextStyle textBlack = TextStyle(
+  decoration: TextDecoration.none,
+  fontWeight: FontWeight.w900,
+  fontSize: 26.sm,
+  overflow: TextOverflow.ellipsis,
 );

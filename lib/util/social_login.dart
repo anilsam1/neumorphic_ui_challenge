@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_structure/model/user_profile_response.dart';
+import 'package:flutter_demo_structure/ui/auth/model/user_profile_response.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -47,10 +47,11 @@ class SocialLogin {
 
   static Future<User?> loginWithGoogle() async {
     await Firebase.initializeApp();
-    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseAuth auth = FirebaseAuth.instance;
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
-      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
 
       if (googleSignInAccount == null) {
         return null;
@@ -64,14 +65,14 @@ class SocialLogin {
         idToken: googleSignInAuthentication.idToken,
       );
 
-      final UserCredential authResult = await _auth.signInWithCredential(credential);
+      final UserCredential authResult =
+          await auth.signInWithCredential(credential);
       final User? user = authResult.user;
 
       if (user != null) {
         assert(!user.isAnonymous);
-        assert(await user.getIdToken() != null);
 
-        final User? currentUser = _auth.currentUser;
+        final User? currentUser = auth.currentUser;
         assert(user.uid == currentUser!.uid);
 
         debugPrint('signInWithGoogle succeeded: $user');
@@ -95,7 +96,7 @@ class SocialLogin {
     bool isAvailable = await SignInWithApple.isAvailable();
 
     debugPrint("Apple Login available..? $isAvailable");
-    final clientState = Uuid().v4();
+    final clientState = const Uuid().v4();
     if (isAvailable) {
       final credential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -136,13 +137,14 @@ class SocialLogin {
         'response_type': 'code id_token',
         'client_id': 'com.hyperlink.flutter_demo_structure',
         'response_mode': 'form_post',
-        'redirect_uri': 'https://first-ossified-foe.glitch.me/callbacks/sign_in_with_apple',
+        'redirect_uri':
+            'https://first-ossified-foe.glitch.me/callbacks/sign_in_with_apple',
         'scope': 'email name',
         'state': clientState,
       });
 
-      final result =
-          await FlutterWebAuth.authenticate(url: url.toString(), callbackUrlScheme: "applink");
+      final result = await FlutterWebAuth.authenticate(
+          url: url.toString(), callbackUrlScheme: "applink");
 
       final body = Uri.parse(result).queryParameters;
       final oauthCredential = OAuthProvider("apple.com").credential(
@@ -150,7 +152,9 @@ class SocialLogin {
         accessToken: body['code'],
       );
 
-      var data = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      var data =
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      debugPrint(data.toString());
 
       return null;
     }
@@ -193,7 +197,7 @@ class SocialLogin {
   static Future<UserData?> loginWithFacebook() async {
     // loginBehavior is only supported for Android devices, for ios it will be ignored
     final result = await FacebookAuth.instance
-        .login(permissions: ['email'], loginBehavior: LoginBehavior.webViewOnly);
+        .login(permissions: ['email'], loginBehavior: LoginBehavior.webOnly);
 
     if (result.status == LoginStatus.success) {
       debugPrint(result.accessToken.toString());
@@ -201,8 +205,8 @@ class SocialLogin {
       // get the user data
       // by default we get the userId, email,name and picture
       // final userData = await FacebookAuth.instance.getUserData();
-      final userData =
-          await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+      final userData = await FacebookAuth.instance
+          .getUserData(fields: "email,birthday,friends,gender,link");
       return UserData.fromJson(userData);
     } else if (result.status == LoginStatus.cancelled) {
       // user cancel login
@@ -214,6 +218,7 @@ class SocialLogin {
       debugPrint(result.status.toString());
       debugPrint(result.message);
     }
+    return null;
   }
 }
 

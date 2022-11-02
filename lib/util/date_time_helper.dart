@@ -5,7 +5,7 @@ String getVerboseDateTimeRepresentation(String dateTimes) {
   DateFormat dateFormat = DateFormat("dd MMM, yyyy · hh:mm a");
   DateTime dateTime = dateFormat.parse(dateTimes);
   DateTime now = DateTime.now();
-  DateTime justNow = now.subtract(Duration(minutes: 1));
+  DateTime justNow = now.subtract(const Duration(minutes: 1));
   DateTime localDateTime = dateTime.toLocal();
 
   if (!localDateTime.difference(justNow).isNegative) {
@@ -20,12 +20,12 @@ String getVerboseDateTimeRepresentation(String dateTimes) {
     return roughTimeString;
   }
 
-  DateTime yesterday = now.subtract(Duration(days: 1));
+  DateTime yesterday = now.subtract(const Duration(days: 1));
 
   if (localDateTime.day == yesterday.day &&
       localDateTime.month == now.month &&
       localDateTime.year == now.year) {
-    return 'Yesterday, ' + roughTimeString;
+    return 'Yesterday, $roughTimeString';
   }
 
   if (now.difference(localDateTime).inDays < 4) {
@@ -41,23 +41,27 @@ extension StringX on String {
   String? getTime(String outFormat) {
     var dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(this, true);
     var dateLocal = dateTime.toLocal();
+    return dateLocal.toString();
   }
 
   String? timeFromStamp({String outFormat = "hh:mm a"}) {
     try {
-      var dateTime = DateTime.fromMillisecondsSinceEpoch(int.parse(this) * 1000);
+      var dateTime =
+          DateTime.fromMillisecondsSinceEpoch(int.parse(this) * 1000);
 
       return DateFormat(outFormat).format(dateTime);
     } catch (error) {
       debugPrint("DateTimeHelper_timeFromStamp");
       debugPrint(error.toString());
     }
+    return null;
   }
 
   String timeAgoFromStamp() {
-    DateTime timeStamp = DateTime.fromMillisecondsSinceEpoch(int.parse(this) * 1000);
-    return '${DateFormat('dd MMM yyyy').format(timeStamp)}';
-
+    DateTime timeStamp =
+        DateTime.fromMillisecondsSinceEpoch(int.parse(this) * 1000);
+    return DateFormat('dd MMM yyyy').format(timeStamp);
+/*
     DateTime now = DateTime.now();
     DateTime justNow = now.subtract(Duration(minutes: 1));
     DateTime localDateTime = timeStamp.toLocal();
@@ -89,10 +93,12 @@ extension StringX on String {
     }
 
     return '${DateFormat('dd MMM yyyy').format(timeStamp)}';
+    */
   }
 
   String? formatDateTime(
-      {String inFormat = "yyyy-MM-dd hh:mm:ss", String outFormat = "dd MMM, yyyy"}) {
+      {String inFormat = "yyyy-MM-dd hh:mm:ss",
+      String outFormat = "dd MMM, yyyy"}) {
     try {
       var dateTime = DateFormat(inFormat).parse(this);
       return DateFormat(outFormat).format(dateTime);
@@ -100,5 +106,6 @@ extension StringX on String {
       debugPrint("DateTimeHelper_timeFromStamp");
       debugPrint(error.toString());
     }
+    return null;
   }
 }

@@ -1,28 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
 import 'package:flutter_demo_structure/core/di/api/req_params.dart' as Req;
 import 'package:flutter_demo_structure/core/di/api/response/api_base/api_base.dart';
-import 'package:flutter_demo_structure/core/navigation/navigation_service.dart';
-import 'package:flutter_demo_structure/core/navigation/routes.dart';
+import 'package:flutter_demo_structure/core/locator.dart';
 import 'package:flutter_demo_structure/res.dart';
+import 'package:flutter_demo_structure/router/app_router.dart';
+import 'package:flutter_demo_structure/ui/auth/login/sign_up_widget.dart';
 import 'package:flutter_demo_structure/ui/auth/login/store/login_store.dart';
-import 'package:flutter_demo_structure/util/utils.dart';
-import 'package:flutter_demo_structure/values/colors.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_demo_structure/values/string_constants.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
-import 'package:flutter_demo_structure/widget/loading.dart';
 import 'package:flutter_demo_structure/widget/text_form_filed.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobx/mobx.dart';
 
-import 'sign_up_widget.dart';
-
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -62,8 +56,7 @@ class _LoginPageState extends State<LoginPage> {
     addDisposer();
   }
 
-  addDisposer() {
-    debugPrint("Add reaction");
+  void addDisposer() {
     _disposers ??= [
       // success reaction
       reaction((_) => authStore.loginResponse, (SingleResponse response) {
@@ -71,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
 
         debugPrint("ONResponse Login: called $response");
         if (response.code == "1") {
-          navigator.pushNamedAndRemoveUntil(RouteName.homePage);
+          locator<AppRouter>().replaceAll([const HomeRoute()]);
           appDB.isLogin = true;
           //showMessage(response.message, type: MessageType.INFO);
         }
@@ -79,13 +72,12 @@ class _LoginPageState extends State<LoginPage> {
       // error reaction
       reaction((_) => authStore.errorMessage, (String? errorMessage) {
         showLoading.value = false;
-        debugPrint("OnError Callled");
         if (errorMessage != null) {
-          Utils.showMessage(errorMessage.toString(), type: MessageType.INFO);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(errorMessage)));
         }
       }),
     ];
-    debugPrint(_disposers!.length.toString());
   }
 
   @override
@@ -93,33 +85,25 @@ class _LoginPageState extends State<LoginPage> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Container(
+        body: SizedBox(
           width: 1.sw,
           height: 1.sh,
           child: SingleChildScrollView(
-            child: ValueListenableBuilder(
-              valueListenable: showLoading,
-              builder: (context, bool value, child) => Loading(
-                status: value,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    30.0.VBox,
-                    getHeaderContent(),
-                    getSignInForm(),
-                    30.0.VBox,
-                    SignUpWidget(
-                      fromLogin: true,
-                      onTap: () => navigator
-                          .pushNamed(RouteName.signUpPage)
-                          .then((value) => _formKey.currentState!.reset()),
-                    ),
-                    40.0.VBox,
-                  ],
-                ).wrapPadding(
-                  padding: EdgeInsets.only(top: 0.h, left: 30.w, right: 30.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                30.0.verticalSpace,
+                getHeaderContent(),
+                getSignInForm(),
+                30.0.verticalSpace,
+                SignUpWidget(
+                  fromLogin: true,
+                  onTap: () => locator<AppRouter>()
+                      .replaceAll([const SignUpRoute()]).then(
+                          (value) => _formKey.currentState!.reset()),
                 ),
-              ),
+                40.0.verticalSpace,
+              ],
             ),
           ),
         ),
@@ -133,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
         FlutterLogo(
           size: 0.15.sh,
         ),
-        10.0.VBox,
+        10.0.verticalSpace,
         Text(
           StringConstant.welcomeBack.toUpperCase(),
           style: textBold.copyWith(
@@ -151,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
         key: _formKey,
         child: Column(
           children: [
-            25.0.VBox,
+            25.0.verticalSpace,
             AppTextField(
               controller: emailController,
               label: StringConstant.email,
@@ -168,8 +152,8 @@ class _LoginPageState extends State<LoginPage> {
                   width: 26.0,
                 ),
               ),
-            ).wrapPaddingHorizontal(20),
-            10.0.VBox,
+            ),
+            10.0.verticalSpace,
             AppTextField(
               label: StringConstant.password,
               hint: StringConstant.password,
@@ -185,17 +169,18 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.centerRight,
                 heightFactor: 1.0,
                 widthFactor: 1.0,
-                child: Text(
-                  StringConstant.forgot,
-                  style: textMedium.copyWith(
-                    color: AppColor.brownColor,
-                    fontSize: 14.0.sp,
+                child: GestureDetector(
+                  onTap: () => Future.delayed(Duration.zero, () {
+                    passwordNode.unfocus();
+                  }),
+                  child: Text(
+                    StringConstant.forgot,
+                    style: textMedium.copyWith(
+                      color: AppColor.brownColor,
+                      fontSize: 14.0.sp,
+                    ),
                   ),
-                ).wrapPaddingAll(12.0).addGestureTap(() => {
-                      Future.delayed(Duration.zero, () {
-                        passwordNode.unfocus();
-                      }),
-                    }),
+                ),
               ),
               prefixIcon: IconButton(
                 onPressed: null,
@@ -206,8 +191,8 @@ class _LoginPageState extends State<LoginPage> {
                   width: 26.0,
                 ),
               ),
-            ).wrapPaddingHorizontal(20),
-            16.0.VBox,
+            ),
+            16.0.verticalSpace,
             AppButtonInverse(
               StringConstant.logIn.toUpperCase(),
               () {
@@ -216,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               elevation: 0.0,
-            ).wrapPaddingHorizontal(20),
+            ),
           ],
         ),
       ),
@@ -249,8 +234,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   removeDisposer() {
-    _disposers!.forEach((element) {
+    for (var element in _disposers!) {
       element.reaction.dispose();
-    });
+    }
   }
 }

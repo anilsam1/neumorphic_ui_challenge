@@ -15,10 +15,8 @@
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# Visual Studio Code related
+.vscode/
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -30,6 +28,7 @@
 .pub-cache/
 .pub/
 /build/
+**/build/
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -44,3 +43,12 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# fvm
+.fvm/flutter_sdk
+.fvm/
+
+#generated files
+*.g.dart
+*.gr.dart
+lib/generated/

@@ -18,16 +18,16 @@ class SingleResponse<T> extends BaseResponse {
   T? data;
 
   SingleResponse({
-    required String message,
-    required String code,
+    required String super.message,
+    required String super.code,
     this.data,
-  }) : super(message: message, code: code);
+  });
 
   factory SingleResponse.fromJson(Map<String, dynamic> json,
       {Function(Map<String, dynamic>)? create}) {
     debugPrint("DataMap:---------");
-    debugPrint("${jsonEncode(json)}");
-    debugPrint("${jsonEncode(json["data"])}");
+    debugPrint(jsonEncode(json));
+    debugPrint(jsonEncode(json["data"]));
     return SingleResponse<T>(
         code: json["code"],
         message: json["message"],
@@ -43,10 +43,10 @@ class ListResponse<T> extends BaseResponse {
   List<T>? data;
 
   ListResponse({
-    required String message,
-    required String code,
+    required String super.message,
+    required String super.code,
     this.data,
-  }) : super(message: message, code: code);
+  });
 
   factory ListResponse.fromJson(Map<String, dynamic> json,
       {Function(Map<String, dynamic>)? create}) {
@@ -60,7 +60,8 @@ class ListResponse<T> extends BaseResponse {
         data.add(v);
       });
     }
-    return ListResponse<T>(code: json["code"], message: json["message"], data: data);
+    return ListResponse<T>(
+        code: json["code"], message: json["message"], data: data);
   }
 }
 
@@ -69,11 +70,11 @@ class ListPageResponse<T> extends BaseResponse {
   int? pageToken;
 
   ListPageResponse({
-    required String message,
-    required String code,
+    required String super.message,
+    required String super.code,
     this.data,
     this.pageToken,
-  }) : super(message: message, code: code);
+  });
 
   factory ListPageResponse.fromJson(Map<String, dynamic> json,
       {Function(Map<String, dynamic>)? create}) {
@@ -93,6 +94,9 @@ class ListPageResponse<T> extends BaseResponse {
     }
 
     return ListPageResponse<T>(
-        code: json["code"], message: json["message"], data: data, pageToken: pageToken);
+        code: json["code"],
+        message: json["message"],
+        data: data,
+        pageToken: pageToken);
   }
 }

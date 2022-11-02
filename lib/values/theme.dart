@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/values/colors.dart';
 import 'package:flutter_demo_structure/values/style.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 final ThemeData appTheme = ThemeData(
   primaryColor: AppColor.primaryColor,
-  accentColor: AppColor.brownColor,
   scaffoldBackgroundColor: const Color(0xfff9f9f9),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   appBarTheme: AppBarTheme(
     color: AppColor.primaryColor,
-    textTheme: TextTheme(
+    iconTheme: const IconThemeData(color: AppColor.white, size: 30.0),
+    toolbarTextStyle: TextTheme(
       headline6: textBold,
-    ),
-    iconTheme: IconThemeData(color: AppColor.white, size: 30.0),
+    ).bodyText2,
+    titleTextStyle: TextTheme(
+      headline6: textBold,
+    ).headline6,
   ),
-  buttonTheme: ButtonThemeData(
+  buttonTheme: const ButtonThemeData(
     buttonColor: AppColor.textBackgroundColor,
     disabledColor: AppColor.textBackgroundColor,
   ),
-  textTheme: GoogleFonts.ralewayTextTheme(),
+  colorScheme:
+      ColorScheme.fromSwatch().copyWith(secondary: AppColor.brownColor),
 );

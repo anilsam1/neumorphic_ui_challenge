@@ -1,7 +1,6 @@
-import 'package:flutter_demo_structure/model/user_profile_response.dart';
+import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/ui/auth/model/user_profile_response.dart';
 import 'package:hive/hive.dart';
-
-import '../locator.dart';
 
 class AppDB {
   static const _appDbBox = '_appDbBox';
@@ -16,9 +15,10 @@ class AppDB {
     return AppDB._(box);
   }
 
-  T getValue<T>(dynamic key, {T? defaultValue}) => _box.get(key, defaultValue: defaultValue) as T;
+  T getValue<T>(key, {T? defaultValue}) =>
+      _box.get(key, defaultValue: defaultValue) as T;
 
-  Future<void> setValue<T>(dynamic key, T value) => _box.put(key, value);
+  Future<void> setValue<T>(key, T value) => _box.put(key, value);
 
   bool get firstTime => getValue("firstTime", defaultValue: false);
 
@@ -40,8 +40,8 @@ class AppDB {
 
   set cartCount(int update) => setValue("cart_count", update);
 
-  String get apiKey =>
-      getValue("apiKey", defaultValue: "ckKirWlycfUYoQcksQV3btr0fjYl7mXXCnzEpOltmuI");
+  String get apiKey => getValue("apiKey",
+      defaultValue: "ckKirWlycfUYoQcksQV3btr0fjYl7mXXCnzEpOltmuI");
 
   set apiKey(String update) => setValue("apiKey", update);
 

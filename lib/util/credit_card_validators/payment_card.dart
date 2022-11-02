@@ -9,7 +9,14 @@ class PaymentCard {
   int? year;
   int? cvv;
 
-  PaymentCard({this.type, this.number, this.name, this.month, this.year, this.cvv});
+  PaymentCard({
+    this.type,
+    this.number,
+    this.name,
+    this.month,
+    this.year,
+    this.cvv,
+  });
 
   @override
   String toString() {
@@ -17,7 +24,17 @@ class PaymentCard {
   }
 }
 
-enum CardType { Master, Visa, Verve, Discover, AmericanExpress, DinersClub, Jcb, Others, Invalid }
+enum CardType {
+  Master,
+  Visa,
+  Verve,
+  Discover,
+  AmericanExpress,
+  DinersClub,
+  Jcb,
+  Others,
+  Invalid
+}
 
 class CardUtils {
   static String? validateCVV(String? value) {
@@ -101,7 +118,8 @@ class CardUtils {
     // 1. The year is in the past. In that case, we just assume that the month
     // has passed
     // 2. Card's month (plus another month) is more than current month.
-    return hasYearPassed(year) || convertYearTo4Digits(year) == now.year && (month < now.month + 1);
+    return hasYearPassed(year) ||
+        convertYearTo4Digits(year) == now.year && (month < now.month + 1);
   }
 
   static bool hasYearPassed(int year) {
@@ -150,7 +168,7 @@ class CardUtils {
         );
         break;
       default:
-        icon = Icon(
+        icon = const Icon(
           Icons.warning,
           size: 40.0,
           color: Colors.red,
@@ -204,8 +222,8 @@ class CardUtils {
 
   static CardType getCardTypeFrmNumber(String input) {
     CardType cardType;
-    if (input.startsWith(
-        RegExp(r'((5[1-5])|(222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720))'))) {
+    if (input.startsWith(RegExp(
+        r'((5[1-5])|(222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720))'))) {
       cardType = CardType.Master;
     } else if (input.startsWith(RegExp(r'[4]'))) {
       cardType = CardType.Visa;

@@ -6,7 +6,7 @@ library simple_gesture_detector;
 import 'package:flutter/material.dart';
 
 /// Callback signature for swipe gesture.
-typedef void SwipeCallback(SwipeDirection direction);
+typedef SwipeCallback = void Function(SwipeDirection direction);
 
 /// Possible directions of swipe gesture.
 enum SwipeDirection { left, right, up, down }
@@ -39,7 +39,6 @@ class SimpleGestureDetector extends StatefulWidget {
 
   /// Creates a [SimpleGestureDetector] widget.
   const SimpleGestureDetector({
-    Key? key,
     required this.child,
     this.swipeConfig = const SimpleSwipeConfig(),
     this.behavior = HitTestBehavior.opaque,
@@ -48,10 +47,11 @@ class SimpleGestureDetector extends StatefulWidget {
     this.onTap,
     this.onDoubleTap,
     this.onLongPress,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _SimpleGestureDetectorState createState() => _SimpleGestureDetectorState();
+  State<SimpleGestureDetector> createState() => _SimpleGestureDetectorState();
 }
 
 class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
@@ -66,7 +66,8 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
   void _onVerticalDragUpdate(DragUpdateDetails details) {
     _finalSwipeOffset = details.globalPosition;
 
-    if (widget.swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
+    if (widget.swipeConfig.swipeDetectionBehavior ==
+        SwipeDetectionBehavior.singularOnEnd) {
       return;
     }
 
@@ -77,14 +78,16 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
       final offsetDifference = initialOffset.dy - finalOffset.dy;
 
       if (offsetDifference.abs() > widget.swipeConfig.verticalThreshold) {
-        _initialSwipeOffset =
-            widget.swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular
-                ? null
-                : _finalSwipeOffset;
+        _initialSwipeOffset = widget.swipeConfig.swipeDetectionBehavior ==
+                SwipeDetectionBehavior.singular
+            ? null
+            : _finalSwipeOffset;
 
-        final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
+        final direction =
+            offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
 
-        if (widget.swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous ||
+        if (widget.swipeConfig.swipeDetectionBehavior ==
+                SwipeDetectionBehavior.continuous ||
             _previousDirection == null ||
             direction != _previousDirection) {
           _previousDirection = direction;
@@ -95,7 +98,8 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
   }
 
   void _onVerticalDragEnd(DragEndDetails details) {
-    if (widget.swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
+    if (widget.swipeConfig.swipeDetectionBehavior ==
+        SwipeDetectionBehavior.singularOnEnd) {
       final initialOffset = _initialSwipeOffset;
       final finalOffset = _finalSwipeOffset;
 
@@ -103,7 +107,8 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
         final offsetDifference = initialOffset.dy - finalOffset.dy;
 
         if (offsetDifference.abs() > widget.swipeConfig.verticalThreshold) {
-          final direction = offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
+          final direction =
+              offsetDifference > 0 ? SwipeDirection.up : SwipeDirection.down;
           widget.onVerticalSwipe!(direction);
         }
       }
@@ -120,7 +125,8 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
     _finalSwipeOffset = details.globalPosition;
 
-    if (widget.swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
+    if (widget.swipeConfig.swipeDetectionBehavior ==
+        SwipeDetectionBehavior.singularOnEnd) {
       return;
     }
 
@@ -131,14 +137,16 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
       final offsetDifference = initialOffset.dx - finalOffset.dx;
 
       if (offsetDifference.abs() > widget.swipeConfig.horizontalThreshold) {
-        _initialSwipeOffset =
-            widget.swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singular
-                ? null
-                : _finalSwipeOffset;
+        _initialSwipeOffset = widget.swipeConfig.swipeDetectionBehavior ==
+                SwipeDetectionBehavior.singular
+            ? null
+            : _finalSwipeOffset;
 
-        final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
+        final direction =
+            offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
 
-        if (widget.swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.continuous ||
+        if (widget.swipeConfig.swipeDetectionBehavior ==
+                SwipeDetectionBehavior.continuous ||
             _previousDirection == null ||
             direction != _previousDirection) {
           _previousDirection = direction;
@@ -149,7 +157,8 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
   }
 
   void _onHorizontalDragEnd(DragEndDetails details) {
-    if (widget.swipeConfig.swipeDetectionBehavior == SwipeDetectionBehavior.singularOnEnd) {
+    if (widget.swipeConfig.swipeDetectionBehavior ==
+        SwipeDetectionBehavior.singularOnEnd) {
       final initialOffset = _initialSwipeOffset;
       final finalOffset = _finalSwipeOffset;
 
@@ -157,7 +166,8 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
         final offsetDifference = initialOffset.dx - finalOffset.dx;
 
         if (offsetDifference.abs() > widget.swipeConfig.horizontalThreshold) {
-          final direction = offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
+          final direction =
+              offsetDifference > 0 ? SwipeDirection.left : SwipeDirection.right;
           widget.onHorizontalSwipe!(direction);
         }
       }
@@ -171,16 +181,22 @@ class _SimpleGestureDetectorState extends State<SimpleGestureDetector> {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: widget.behavior,
-      child: widget.child,
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
       onDoubleTap: widget.onDoubleTap,
-      onVerticalDragStart: widget.onVerticalSwipe != null ? _onVerticalDragStart : null,
-      onVerticalDragUpdate: widget.onVerticalSwipe != null ? _onVerticalDragUpdate : null,
-      onVerticalDragEnd: widget.onVerticalSwipe != null ? _onVerticalDragEnd : null,
-      onHorizontalDragStart: widget.onHorizontalSwipe != null ? _onHorizontalDragStart : null,
-      onHorizontalDragUpdate: widget.onHorizontalSwipe != null ? _onHorizontalDragUpdate : null,
-      onHorizontalDragEnd: widget.onHorizontalSwipe != null ? _onHorizontalDragEnd : null,
+      onVerticalDragStart:
+          widget.onVerticalSwipe != null ? _onVerticalDragStart : null,
+      onVerticalDragUpdate:
+          widget.onVerticalSwipe != null ? _onVerticalDragUpdate : null,
+      onVerticalDragEnd:
+          widget.onVerticalSwipe != null ? _onVerticalDragEnd : null,
+      onHorizontalDragStart:
+          widget.onHorizontalSwipe != null ? _onHorizontalDragStart : null,
+      onHorizontalDragUpdate:
+          widget.onHorizontalSwipe != null ? _onHorizontalDragUpdate : null,
+      onHorizontalDragEnd:
+          widget.onHorizontalSwipe != null ? _onHorizontalDragEnd : null,
+      child: widget.child,
     );
   }
 }

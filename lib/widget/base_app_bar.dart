@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +32,8 @@ class BaseAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.leadingWidgetColor,
     this.titleWidgetColor,
     this.preferredSize = const Size.fromHeight(kToolbarHeight),
-  }) : assert(title == null || titleWidget == null, "Title and Title widget both can't be null");
+  }) : assert(title == null || titleWidget == null,
+            "Title and Title widget both can't be null");
 
   /*BaseAppBar(String title,
       {Key? key,
@@ -71,15 +73,15 @@ class _BaseAppBarState extends State<BaseAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: widget.centerTitle,
-      brightness: Brightness.light,
       title: !widget.showTitle
-          ? SizedBox.shrink()
+          ? const SizedBox.shrink()
           : widget.titleWidget ??
               Text(
                 widget.title!,
-                style: textBold.copyWith(fontSize: 19.sp, color: widget.titleWidgetColor),
+                style: textBold.copyWith(
+                    fontSize: 19.sp, color: widget.titleWidgetColor),
               ),
-      backgroundColor: widget.backgroundColor != null ? widget.backgroundColor : AppColor.white,
+      backgroundColor: widget.backgroundColor ?? AppColor.white,
       elevation: widget.elevations,
       automaticallyImplyLeading: false,
       //brightness: Brightness.dark,
@@ -93,27 +95,28 @@ class _BaseAppBarState extends State<BaseAppBar> {
                   color: widget.leadingWidgetColor,
                 ),
                 onPressed: () {
-                  if (widget.backAction != null)
+                  if (widget.backAction != null) {
                     widget.backAction!.call();
-                  else
+                  } else {
                     Navigator.maybePop(context);
+                  }
                 },
               )
           : null,
-      iconTheme: IconThemeData(color: Colors.black),
-      actions: widget.action,
+      iconTheme: const IconThemeData(color: Colors.black),
+      actions: widget.action, systemOverlayStyle: SystemUiOverlayStyle.dark,
     );
   }
 }
 
 class OverLapsWidget extends StatelessWidget {
   const OverLapsWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 15.67.w,
       height: 17.96.h,
       child: Stack(
@@ -123,7 +126,7 @@ class OverLapsWidget extends StatelessWidget {
             child: Container(
               width: 9.w,
               height: 9.h,
-              margin: EdgeInsets.only(top: 10, right: 22.0),
+              margin: const EdgeInsets.only(top: 10, right: 22.0),
               child: Container(
                 width: 9.h,
                 height: 9.w,

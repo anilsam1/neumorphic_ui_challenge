@@ -6,10 +6,13 @@ import 'package:webview_flutter/webview_flutter.dart';
 class WebViewPage extends StatefulWidget {
   final WebViewInfoData webViewInfo;
 
-  WebViewPage({required this.webViewInfo});
+  const WebViewPage({
+    required this.webViewInfo,
+    super.key,
+  });
 
   @override
-  _WebViewPageState createState() => _WebViewPageState();
+  State<WebViewPage> createState() => _WebViewPageState();
 }
 
 class _WebViewPageState extends State<WebViewPage> {
@@ -47,7 +50,7 @@ class _WebViewPageState extends State<WebViewPage> {
             ),
             Visibility(
               visible: _isLoadingPage,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             )

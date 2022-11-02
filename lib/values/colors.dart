@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class AppColor {
-  static const Color accentColor = Color(0xFF709FD);
+  static const Color accentColor = Color(0x0ff709fd);
   static const Color primaryColor = Color(0xFF567d89);
   static const Color primaryColorDark = Color(0xFF29515c);
 
@@ -23,9 +23,9 @@ abstract class AppColor {
   static const Color colorHint = Color(0xFF999B9C);
   static const Color favColor = Color(0xffF31C56);
 
-  static const Color white = Color(0xFFFFFFFF);
-  static const Color redColor = Color(0xFFDF0000);
+  static const Color white = Colors.white;
+  static const Color black = Colors.black;
+  static const Color red = Colors.red;
   static const Color transparent = Colors.transparent;
-  static const Color greyColor = Color(0xFFC2C2C2);
-  static const Color dividerColor = Color(0xFF898E95);
+  static const MaterialColor grey = Colors.grey;
 }

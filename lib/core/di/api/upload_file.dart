@@ -10,7 +10,8 @@ class UploadFile {
 
   Future<void> call(String url, File image) async {
     try {
-      var response = await http.put(Uri.parse(url), body: image.readAsBytesSync());
+      var response =
+          await http.put(Uri.parse(url), body: image.readAsBytesSync());
       if (response.statusCode == 200) {
         isUploaded = true;
         debugPrint(response.body);

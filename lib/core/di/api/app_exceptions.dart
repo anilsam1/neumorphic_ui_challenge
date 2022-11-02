@@ -4,13 +4,15 @@ class AppException implements Exception {
 
   AppException([this._message, this._prefix]);
 
+  @override
   String toString() {
-    return _message;
+    return "$_message $_prefix";
   }
 }
 
 class FetchDataException extends AppException {
-  FetchDataException(String message) : super(message, "Error During Communication: ");
+  FetchDataException(String message)
+      : super(message, "Error During Communication: ");
 }
 
 class BadRequestException extends AppException {
@@ -26,7 +28,8 @@ class InvalidInputException extends AppException {
 }
 
 class RequestCanceledException extends AppException {
-  RequestCanceledException([String? message]) : super(message, "Invalid Input: ");
+  RequestCanceledException([String? message])
+      : super(message, "Invalid Input: ");
 }
 
 class ServerSideException extends AppException {
@@ -38,5 +41,6 @@ class ConnectionException extends AppException {
 }
 
 class NoInternetException extends AppException {
-  NoInternetException([String? message]) : super(message, "No Active Internet Connection");
+  NoInternetException([String? message])
+      : super(message, "No Active Internet Connection");
 }

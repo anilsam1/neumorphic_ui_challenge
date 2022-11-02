@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/values/string_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomAlertDialog extends StatelessWidget {
@@ -12,13 +10,15 @@ class CustomAlertDialog extends StatelessWidget {
   final Function()? onTapOkCallback;
   final Function()? onTapCancelCallback;
 
-  CustomAlertDialog(
-      {this.title = kConfirm,
-      this.subTitle = kLogoutMsg,
-      this.buttonOkText = StringConstant.ok,
-      this.buttonCancelText = StringConstant.cancel,
-      this.onTapOkCallback,
-      this.onTapCancelCallback});
+  const CustomAlertDialog({
+    required this.title,
+    required this.subTitle,
+    required this.buttonOkText,
+    required this.buttonCancelText,
+    this.onTapOkCallback,
+    this.onTapCancelCallback,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class CustomAlertDialog extends StatelessWidget {
       backgroundColor: Colors.transparent,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: AppColor.white,
         ),
@@ -37,7 +37,7 @@ class CustomAlertDialog extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
               child: Text(
-                this.title,
+                title,
                 style: textBold,
               ),
             ),
@@ -49,7 +49,7 @@ class CustomAlertDialog extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),
               child: Text(
-                this.subTitle,
+                subTitle,
                 textAlign: TextAlign.center,
                 style: textMedium.copyWith(fontSize: 20.sp),
               ),
@@ -69,13 +69,13 @@ class CustomAlertDialog extends StatelessWidget {
                       return Container(
                         width: 100.w,
                         height: 40.h,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           color: AppColor.primaryColor,
                         ),
                         child: Center(
                           child: Text(
-                            this.buttonCancelText,
+                            buttonCancelText,
                             style: textBold.copyWith(color: AppColor.white),
                           ),
                         ),
@@ -92,13 +92,13 @@ class CustomAlertDialog extends StatelessWidget {
                       return Container(
                         width: 100.w,
                         height: 40.h,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           color: AppColor.primaryColor,
                         ),
                         child: Center(
                           child: Text(
-                            this.buttonOkText,
+                            buttonOkText,
                             style: textBold.copyWith(color: AppColor.white),
                           ),
                         ),

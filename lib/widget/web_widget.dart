@@ -39,14 +39,19 @@ class _WebViewPageState extends State<WebViewPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            WebView(
-              initialUrl: widget.webViewInfo.url,
-              javascriptMode: JavascriptMode.unrestricted,
-              onPageFinished: (finish) {
-                setState(() {
-                  _isLoadingPage = false;
-                });
-              },
+            WebViewWidget(
+              controller: WebViewController()
+                ..setJavaScriptMode(JavaScriptMode.unrestricted)
+                ..setNavigationDelegate(NavigationDelegate(
+                  onPageFinished: (finish) {
+                    setState(() {
+                      _isLoadingPage = false;
+                    });
+                  },
+                ))
+                ..loadRequest(
+                  Uri.parse(widget.webViewInfo.url),
+                ),
             ),
             Visibility(
               visible: _isLoadingPage,

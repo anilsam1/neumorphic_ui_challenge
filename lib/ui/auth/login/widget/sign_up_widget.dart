@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignUpWidget extends StatelessWidget {
@@ -41,7 +41,7 @@ class SignUpWidget extends StatelessWidget {
                   : S.current.alreadyHaveAccount,
               style: textMedium.copyWith(
                 color: AppColor.brownColor,
-                fontSize: 16.sp,
+                fontSize: 16.spMin,
               ),
             ),
             4.0.verticalSpace,
@@ -51,7 +51,7 @@ class SignUpWidget extends StatelessWidget {
                   : S.current.login.toUpperCase(),
               style: textBold.copyWith(
                 color: AppColor.primaryColor,
-                fontSize: 20.sp,
+                fontSize: 20.spMin,
               ),
             ),
           ],

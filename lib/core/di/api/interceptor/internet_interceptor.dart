@@ -15,7 +15,7 @@ class InternetInterceptors extends Interceptor {
             statusMessage: 'No Internet Connection',
             requestOptions: options,
           ),
-          type: DioErrorType.other,
+          type: DioErrorType.unknown,
         ),
       );
     }

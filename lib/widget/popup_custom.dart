@@ -10,9 +10,9 @@ const double _kMenuScreenPadding = 8.0;
 
 class _PopupMenu<T> extends StatelessWidget {
   const _PopupMenu({
-    super.key,
     required this.route,
     required this.semanticLabel,
+    super.key,
   });
 
   final _PopupMenuRoute<T> route;
@@ -192,12 +192,12 @@ class _PopupMenuRoute<T> extends PopupRoute<T> {
   _PopupMenuRoute({
     required this.position,
     required this.items,
-    this.initialValue,
     required this.elevation,
     required this.theme,
     required this.barrierLabel,
     required this.semanticLabel,
     required this.height,
+    this.initialValue,
   });
 
   final RelativeRect position;

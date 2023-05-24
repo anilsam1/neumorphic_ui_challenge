@@ -82,6 +82,7 @@
   "name": "Name",
   "mobNumber": "Mobile Number",
   "confPassword": "Confirm Password",
+  "kConfPassword": "Please enter confirm password",
   "iAgree": "I agree to ",
   "tNc": "Terms & Conditions",
   "and": " and ",
@@ -89,5 +90,12 @@
   "passwordMismatch": "Password and Confirm password not match",
   "acceptTnC": "Please accept $tNc $and $privacyPolicy",
   "home": "Home",
-  "dashboard": "Dashboard"
+  "dashboard": "Dashboard",
+  "pickedFileCount": "Picked file count: ",
+  "photoPermission": "Photo Permission",
+  "permissionDeniedAlwaysUserNeedToAllowManually": "Permission denied always user need to allow manually",
+  "userAllowedToAccessPhotos": "User Allowed to access photos",
+  "userDeniedToAccessPhotos": "User Denied to access photos",
+  "search": "Search...",
+  "selectYourPhoneCode": "Select your phone code"
 }

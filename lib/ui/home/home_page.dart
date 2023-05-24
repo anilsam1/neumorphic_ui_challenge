@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_demo_structure/widget/image_picker_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:images_picker/images_picker.dart';
 
+@RoutePage()
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -22,26 +24,33 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, MediaPickerListener {
-  ValueNotifier showLoading = ValueNotifier<bool>(false);
+  late ValueNotifier showLoading;
   var style =
       TextButton.styleFrom(minimumSize: const Size(double.maxFinite, 20));
   int? count;
   List<Media?>? pickedFilesList;
   List<PlatformFile>? pickedDocuments;
   FilesType? type;
-
   late MediaPickerHandler _mediaPickerHandler;
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
+    showLoading = ValueNotifier<bool>(false);
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
     _mediaPickerHandler = MediaPickerHandler(this, _controller);
     _mediaPickerHandler.init();
+  }
+
+  @override
+  void dispose() {
+    showLoading.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,7 +63,7 @@ class _HomePageState extends State<HomePage>
             children: [
               Text(
                 S.current.home,
-                style: textBold.copyWith(fontSize: 30.sp),
+                style: textBold.copyWith(fontSize: 30.spMin),
               ),
               25.0.verticalSpace,
               Column(
@@ -62,7 +71,7 @@ class _HomePageState extends State<HomePage>
                 children: [
                   if (count != null)
                     Text(
-                      "Picked file count: $count",
+                      "${S.current.pickedFileCount} $count",
                       style: textBold,
                     ),
                   10.0.verticalSpace,
@@ -142,36 +151,7 @@ class _HomePageState extends State<HomePage>
                 ],
               ),
               25.0.verticalSpace,
-              Column(
-                children: [
-                  TextButton(
-                    child: const Text('Photo Permission'),
-                    onPressed: () async {
-                      await PhotosPermission().request(
-                        onPermanentlyDenied: () =>
-                            ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                'Permission denied always user need to allow manually'),
-                          ),
-                        ),
-                        onGranted: () =>
-                            ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('User Allowed to access photos'),
-                          ),
-                        ),
-                        onPermissionDenied: () =>
-                            ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('User Denied to access photos'),
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                ],
-              ),
+              buildTakePhotoPermission(context),
               TextButton(
                 onPressed: () {
                   appDB.logout();
@@ -187,6 +167,45 @@ class _HomePageState extends State<HomePage>
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildTakePhotoPermission(BuildContext context) {
+    return Column(
+      children: [
+        TextButton(
+          child: Text(
+            S.current.photoPermission,
+          ),
+          onPressed: () async {
+            await PhotosPermission().request(
+              onPermanentlyDenied: () =>
+                  ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    S.current.permissionDeniedAlwaysUserNeedToAllowManually,
+                  ),
+                ),
+              ),
+              onGranted: () => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    S.current.userAllowedToAccessPhotos,
+                  ),
+                ),
+              ),
+              onPermissionDenied: () =>
+                  ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    S.current.userDeniedToAccessPhotos,
+                  ),
+                ),
+              ),
+            );
+          },
+        )
+      ],
     );
   }
 

@@ -99,9 +99,10 @@ class AppTextField extends StatelessWidget {
       maxLines: maxLines,
       style: textStyle,
       obscureText: obscureText,
-      validator: validators ?? (String? value) {
-              return null;
-            },
+      validator: validators ??
+          (String? value) {
+            return null;
+          },
       keyboardType: keyboardType,
       textInputAction: keyboardAction,
       textCapitalization: textCapitalization,
@@ -130,7 +131,7 @@ class AppTextField extends StatelessWidget {
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintStyle: textMedium.copyWith(
               color: AppColor.santasGray,
-              fontSize: 15.sp,
+              fontSize: 15.spMin,
             ),
             errorStyle: textMedium.copyWith(color: AppColor.red),
             errorMaxLines: 2,

@@ -14,7 +14,7 @@ class DioErrorUtil {
 
     debugPrint(error.toString());
     switch (error.type) {
-      case DioErrorType.other:
+      case DioErrorType.unknown:
         if (error.error is SocketException) {
           throw ConnectionException(
               "Connection to server failed due to internet connection.");
@@ -24,18 +24,18 @@ class DioErrorUtil {
           throw InvalidInputException(
               "Something went wrong. Please try after sometime.");
         }
-        break;
+
       case DioErrorType.cancel:
         errorDescription = "Request to server was cancelled";
         break;
-      case DioErrorType.connectTimeout:
+      case DioErrorType.connectionTimeout:
         throw RequestCanceledException("Connection timeout with server");
 
       case DioErrorType.receiveTimeout:
         throw ServerSideException(
             "Request can't be handled for now. Please try after sometime.");
 
-      case DioErrorType.response:
+      case DioErrorType.badResponse:
         debugPrint("Response:");
         debugPrint(error.toString());
         if (error.response!.statusCode == 12039 ||
@@ -62,6 +62,11 @@ class DioErrorUtil {
       case DioErrorType.sendTimeout:
         throw ServerSideException(
             "Request can't be handled for now. Please try after sometime.");
+      case DioErrorType.badCertificate:
+        throw ServerSideException(
+            "Request can't be handled for now. Please try after sometime.");
+      case DioErrorType.connectionError:
+        throw RequestCanceledException("Connection timeout with server");
     }
 
     return errorDescription;

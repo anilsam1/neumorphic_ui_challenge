@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class CountDownTimer extends StatefulWidget {
   const CountDownTimer({
-    super.key,
-    required int secondsRemaining,
+    required this.secondsRemaining,
     required this.countDownTimerStyle,
     required this.whenTimeExpires,
     required this.countDownFormatter,
-  })  : secondsRemaining = secondsRemaining;
+    super.key,
+  });
 
   final int secondsRemaining;
   final Function whenTimeExpires;
@@ -51,6 +51,7 @@ class _CountDownTimerState extends State<CountDownTimer>
 
   @override
   void didUpdateWidget(CountDownTimer oldWidget) {
+    super.didUpdateWidget(oldWidget);
     if (widget.secondsRemaining != oldWidget.secondsRemaining) {
       setState(() {
         duration = Duration(seconds: widget.secondsRemaining);

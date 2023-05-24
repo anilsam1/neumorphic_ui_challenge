@@ -39,17 +39,17 @@
 
 ## Environment
 
-**Flutter version** : 3.3.6
+**Flutter version** : 3.7.11
 
 **Flutter channel** : Stable
 
 **iOS**
-- iOS 11+
+- iOS 12+
 
 **Android**
 - Android 5.0+
     - minSdkVersion 21
-- targetSdkVersion 32
+- targetSdkVersion 33
 
 ## Code Style
 - [Effective Dart](https://dart.dev/guides/language/effective-dart)

@@ -3,7 +3,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 
 final MultiValidator nameValidator = MultiValidator([
   RequiredValidator(errorText: S.current.kEnterFirstName),
-  EmailValidator(errorText: S.current.kEnterValidFirstName),
+  MinLengthValidator(1, errorText: S.current.kEnterValidFirstName),
 ]);
 final MultiValidator emailValidator = MultiValidator([
   RequiredValidator(errorText: S.current.kEnterEmailAddress),
@@ -21,7 +21,7 @@ final MultiValidator passwordValidator = MultiValidator([
   MinLengthValidator(8, errorText: S.current.kEnterValidPassword),
 ]);
 final MultiValidator confPasswordValidator = MultiValidator([
-  RequiredValidator(errorText: S.current.kEnterPassword),
+  RequiredValidator(errorText: S.current.kConfPassword),
   MinLengthValidator(8, errorText: S.current.kEnterValidPassword),
 ]);
 final MultiValidator newPasswordValidator = MultiValidator([

@@ -10,11 +10,11 @@ final ThemeData appTheme = ThemeData(
     color: AppColor.primaryColor,
     iconTheme: const IconThemeData(color: AppColor.white, size: 30.0),
     toolbarTextStyle: TextTheme(
-      headline6: textBold,
-    ).bodyText2,
+      titleLarge: textBold,
+    ).bodyMedium,
     titleTextStyle: TextTheme(
-      headline6: textBold,
-    ).headline6,
+      titleLarge: textBold,
+    ).titleLarge,
   ),
   buttonTheme: const ButtonThemeData(
     buttonColor: AppColor.textBackgroundColor,

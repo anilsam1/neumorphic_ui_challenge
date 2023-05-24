@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/util/media_picker.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:images_picker/images_picker.dart';
 
 @immutable

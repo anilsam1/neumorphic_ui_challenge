@@ -19,6 +19,7 @@ class BaseAppBar extends StatefulWidget implements PreferredSizeWidget {
   Color? titleWidgetColor;
 
   BaseAppBar({
+    super.key,
     this.title,
     this.centerTitle = true,
     this.backgroundColor = AppColor.primaryColor,
@@ -35,37 +36,11 @@ class BaseAppBar extends StatefulWidget implements PreferredSizeWidget {
   }) : assert(title == null || titleWidget == null,
             "Title and Title widget both can't be null");
 
-  /*BaseAppBar(String title,
-      {Key? key,
-      Color backgroundColor = AppColor.primaryColor,
-      bool centerTitle = true,
-      List<Widget>? action,
-      Widget? titleWidget,
-      Widget? leadingWidget,
-      Color? leadingWidgetColor,
-      Function()? backAction,
-      double elevations = 0.0,
-      bool leadingIcon = false})
-      : preferredSize = Size.fromHeight(kToolbarHeight),
-        super(key: key) {
-    this.title = title;
-    this.centerTitle = centerTitle;
-    this.backgroundColors = backgroundColor;
-    this.action = action;
-    this.leadingIcon = leadingIcon;
-    this.elevations = elevations;
-    this.backAction = backAction;
-    this.titleWidget = titleWidget;
-    this.leadingWidget = leadingWidget;
-    this.leadingWidgetColor = leadingWidgetColor;
-  }
-*/
-
   @override
   final Size preferredSize; // default is 56.0
 
   @override
-  _BaseAppBarState createState() => _BaseAppBarState();
+  State<BaseAppBar> createState() => _BaseAppBarState();
 }
 
 class _BaseAppBarState extends State<BaseAppBar> {
@@ -79,7 +54,7 @@ class _BaseAppBarState extends State<BaseAppBar> {
               Text(
                 widget.title!,
                 style: textBold.copyWith(
-                    fontSize: 19.sp, color: widget.titleWidgetColor),
+                    fontSize: 19.spMin, color: widget.titleWidgetColor),
               ),
       backgroundColor: widget.backgroundColor ?? AppColor.white,
       elevation: widget.elevations,
@@ -140,7 +115,7 @@ class OverLapsWidget extends StatelessWidget {
                   child: Center(
                     child: Text(
                       '1',
-                      style: TextStyle(fontSize: 5.sp),
+                      style: TextStyle(fontSize: 5.spMin),
                     ),
                   ),
                 ),

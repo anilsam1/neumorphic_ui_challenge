@@ -43,39 +43,45 @@ extension StringX on String {
     );
   }
 
-  withNormalFont(BuildContext context,
-      {Color color = Colors.black, int? maxline}) {
+  withNormalFont(
+    BuildContext context, {
+    Color color = Colors.black,
+  }) {
     return Text(
       this,
-      style: Theme.of(context).textTheme.headline6!.copyWith(color: color),
+      style: Theme.of(context).textTheme.titleLarge!.copyWith(color: color),
     );
   }
 
   text(
     BuildContext context, {
     Color color = Colors.black,
-    int? maxline,
     TextStyle? textStyle,
   }) {
     return Text(
       this,
       style: textStyle ??
-          Theme.of(context).textTheme.headline6!.copyWith(color: color),
+          Theme.of(context).textTheme.titleLarge!.copyWith(color: color),
     );
   }
 
-  subText(BuildContext context, {Color color = Colors.black54, int? maxline}) {
+  subText(
+    BuildContext context, {
+    Color color = Colors.black54,
+  }) {
     return Text(
       this,
       style: Theme.of(context).textTheme.subtitle2!.copyWith(color: color),
     );
   }
 
-  withSmallFont(BuildContext context,
-      {Color color = Colors.black54, int? maxline}) {
+  withSmallFont(
+    BuildContext context, {
+    Color color = Colors.black54,
+  }) {
     return Text(
       this,
-      style: Theme.of(context).textTheme.subtitle2!.copyWith(color: color),
+      style: Theme.of(context).textTheme.titleSmall!.copyWith(color: color),
     );
   }
 

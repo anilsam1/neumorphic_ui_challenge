@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_demo_structure/core/di/api/api_end_points.dart';
 import 'package:flutter_demo_structure/core/di/api/app_exceptions.dart';
 import 'package:flutter_demo_structure/core/di/api/dio_util_error.dart';
@@ -19,23 +19,36 @@ class HttpClient {
     _client = Dio()
       ..options = BaseOptions(
         baseUrl: APIEndPoints.baseUrl,
-        /*     requestEncoder: (String request, RequestOptions options) =>
-            utf8.encode(enc.encrypt(jsonEncode(options.data))),
-        responseDecoder:
-            (List<int> responseBytes, RequestOptions options, ResponseBody responseBody) =>
-                jsonDecode(enc.decrypt(utf8.decode(responseBytes))),*/
       );
-    _client.interceptors.add(
-      PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseBody: true,
-        responseHeader: false,
-        compact: true,
-      ),
-    );
-    _client.interceptors.add(InternetInterceptors());
+
+    if (kDebugMode) {
+      _client.interceptors.add(
+        PrettyDioLogger(
+          requestHeader: false,
+          requestBody: true,
+          request: true,
+          responseBody: false,
+          responseHeader: false,
+          compact: true,
+        ),
+      );
+    }
     _client.interceptors.add(CustomInterceptors());
+
+    /// Disable logging into production
+    if (kDebugMode) {
+      _client.interceptors.add(
+        PrettyDioLogger(
+          requestHeader: true,
+          requestBody: false,
+          request: false,
+          responseBody: true,
+          responseHeader: true,
+          compact: true,
+        ),
+      );
+    }
+    _client.interceptors.add(InternetInterceptors());
   }
 
   Future<dynamic> get(String url) async {
@@ -126,10 +139,6 @@ class HttpClient {
   }
 
   wrapRequest(body) {
-    debugPrint("-----------REQUEST-------------");
-    debugPrint(body);
-    debugPrint("------------------------");
-    debugPrint(jsonEncode(body));
     return jsonEncode(body);
   }
 }

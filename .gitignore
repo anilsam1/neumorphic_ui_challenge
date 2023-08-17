@@ -45,10 +45,13 @@ app.*.map.json
 /android/app/release
 
 # fvm
-.fvm/flutter_sdk
 .fvm/
 
 #generated files
 *.g.dart
 *.gr.dart
+*.freezed.dart
 lib/generated/
+
+#sonarqube
+.scannerwork/

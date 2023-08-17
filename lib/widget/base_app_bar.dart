@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_demo_structure/res.dart';
+import 'package:flutter_demo_structure/generated/assets.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+//ignore: must_be_immutable
 class BaseAppBar extends StatefulWidget implements PreferredSizeWidget {
   late String? title;
   bool centerTitle = false;
@@ -12,7 +13,7 @@ class BaseAppBar extends StatefulWidget implements PreferredSizeWidget {
   List<Widget>? action;
   bool leadingIcon = false;
   bool showTitle = false;
-  Function()? backAction;
+  VoidCallback? backAction;
   Widget? titleWidget;
   Widget? leadingWidget;
   Color? leadingWidgetColor;
@@ -33,8 +34,10 @@ class BaseAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.leadingWidgetColor,
     this.titleWidgetColor,
     this.preferredSize = const Size.fromHeight(kToolbarHeight),
-  }) : assert(title == null || titleWidget == null,
-            "Title and Title widget both can't be null");
+  }) : assert(
+          title == null || titleWidget == null,
+          "Title and Title widget both can't be null",
+        );
 
   @override
   final Size preferredSize; // default is 56.0
@@ -54,7 +57,9 @@ class _BaseAppBarState extends State<BaseAppBar> {
               Text(
                 widget.title!,
                 style: textBold.copyWith(
-                    fontSize: 19.spMin, color: widget.titleWidgetColor),
+                  fontSize: 19.spMin,
+                  color: widget.titleWidgetColor,
+                ),
               ),
       backgroundColor: widget.backgroundColor ?? AppColor.white,
       elevation: widget.elevations,
@@ -64,7 +69,7 @@ class _BaseAppBarState extends State<BaseAppBar> {
           ? widget.leadingWidget ??
               IconButton(
                 icon: Image.asset(
-                  Res.back,
+                  Assets.imageBack,
                   height: 20.0,
                   width: 24.0,
                   color: widget.leadingWidgetColor,
@@ -80,50 +85,6 @@ class _BaseAppBarState extends State<BaseAppBar> {
           : null,
       iconTheme: const IconThemeData(color: Colors.black),
       actions: widget.action, systemOverlayStyle: SystemUiOverlayStyle.dark,
-    );
-  }
-}
-
-class OverLapsWidget extends StatelessWidget {
-  const OverLapsWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 15.67.w,
-      height: 17.96.h,
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              width: 9.w,
-              height: 9.h,
-              margin: const EdgeInsets.only(top: 10, right: 22.0),
-              child: Container(
-                width: 9.h,
-                height: 9.w,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor.toolbarColor,
-                  border: Border.all(color: Colors.white, width: 1),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Center(
-                    child: Text(
-                      '1',
-                      style: TextStyle(fontSize: 5.spMin),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

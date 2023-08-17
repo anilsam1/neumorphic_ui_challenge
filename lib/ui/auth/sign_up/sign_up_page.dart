@@ -4,14 +4,14 @@ import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/core/locator/locator.dart';
+import 'package:flutter_demo_structure/generated/assets.dart';
 import 'package:flutter_demo_structure/generated/l10n.dart';
-import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/ui/auth/login/widget/sign_up_widget.dart';
 import 'package:flutter_demo_structure/values/export.dart';
+import 'package:flutter_demo_structure/widget/app_text_filed.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
-import 'package:flutter_demo_structure/widget/text_form_filed.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobx/mobx.dart';
 
@@ -26,18 +26,18 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final bool _isHidden = true;
   late GlobalKey<FormState> _formKey;
-  late TextEditingController nameController,
-      emailController,
-      mobileController,
-      passwordController,
-      confPasswordController;
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+  late TextEditingController mobileController;
+  late TextEditingController passwordController;
+  late TextEditingController confPasswordController;
   late FocusNode mobileNode;
   late ValueNotifier<bool> showLoading;
   late ValueNotifier<bool> _isRead;
   late List<ReactionDisposer> _disposers;
   bool get isCurrent => !ModalRoute.of(context)!.isCurrent;
-  var socialId, type = "S";
-  Country _selectedDialogCountry = CountryPickerUtils.getCountryByIsoCode('IN');
+
+  Country _selectedDialogCountry = CountryPickerUtils.getCountryByIsoCode('US');
 
   @override
   void initState() {
@@ -68,25 +68,23 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 0, left: 30, right: 30).r,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                30.0.verticalSpace,
-                getHeaderContent(),
-                getSignUpForm(),
-                40.0.verticalSpace,
-                SignUpWidget(
-                  fromLogin: false,
-                  onTap: () => locator<AppRouter>().pop(),
-                ),
-                40.0.verticalSpace,
-              ],
-            ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30).r,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              30.0.verticalSpace,
+              getHeaderContent(),
+              getSignUpForm(),
+              40.0.verticalSpace,
+              SignUpWidget(
+                fromLogin: false,
+                onTap: () => locator<AppRouter>().pop(),
+              ),
+              40.0.verticalSpace,
+            ],
           ),
         ),
       ),
@@ -131,7 +129,7 @@ class _SignUpPageState extends State<SignUpPage> {
             prefixIcon: IconButton(
               onPressed: null,
               icon: Image.asset(
-                Res.user,
+                Assets.imageUser,
                 color: AppColor.primaryColor,
                 height: 26.0,
                 width: 26.0,
@@ -148,7 +146,7 @@ class _SignUpPageState extends State<SignUpPage> {
             prefixIcon: IconButton(
               onPressed: null,
               icon: Image.asset(
-                Res.email,
+                Assets.imageEmail,
                 color: AppColor.primaryColor,
                 height: 26.0,
                 width: 26.0,
@@ -164,7 +162,7 @@ class _SignUpPageState extends State<SignUpPage> {
             validators: mobileValidator,
             focusNode: mobileNode,
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              FilteringTextInputFormatter.allow(RegExp('[0-9]')),
               LengthLimitingTextInputFormatter(10),
             ],
             prefixIcon: Padding(
@@ -175,7 +173,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   IconButton(
                     onPressed: null,
                     icon: Image.asset(
-                      Res.mobile,
+                      Assets.imageMobile,
                       color: AppColor.primaryColor,
                       height: 26.0.r,
                       width: 26.0.r,
@@ -200,7 +198,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         5.0.horizontalSpace,
                         Image.asset(
-                          Res.arrow_down,
+                          Assets.imageArrowDown,
                           color: AppColor.osloGray,
                           height: 8.0,
                           width: 8.0,
@@ -220,13 +218,11 @@ class _SignUpPageState extends State<SignUpPage> {
             validators: passwordValidator,
             controller: passwordController,
             keyboardType: TextInputType.visiblePassword,
-            keyboardAction: TextInputAction.next,
-            maxLines: 1,
             maxLength: 15,
             prefixIcon: IconButton(
               onPressed: null,
               icon: Image.asset(
-                Res.password,
+                Assets.imagePassword,
                 color: AppColor.primaryColor,
                 height: 26.0,
                 width: 26.0,
@@ -242,12 +238,11 @@ class _SignUpPageState extends State<SignUpPage> {
             controller: confPasswordController,
             keyboardType: TextInputType.visiblePassword,
             keyboardAction: TextInputAction.done,
-            maxLines: 1,
             maxLength: 15,
             prefixIcon: IconButton(
               onPressed: null,
               icon: Image.asset(
-                Res.password,
+                Assets.imagePassword,
                 color: AppColor.primaryColor,
                 height: 26.0,
                 width: 26.0,
@@ -268,7 +263,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     splashColor: AppColor.transparent,
                     padding: EdgeInsets.zero,
                     icon: Image.asset(
-                      Res.checked_box,
+                      Assets.imageCheckedBox,
                       color: value ? AppColor.primaryColor : AppColor.osloGray,
                     ),
                     onPressed: () => _isRead.value = !value,
@@ -292,7 +287,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(S.current.tNc)));
+                                SnackBar(content: Text(S.current.tNc)),
+                              );
                             },
                         ),
                         TextSpan(
@@ -306,8 +302,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(S.current.privacyPolicy)));
+                                SnackBar(
+                                  content: Text(S.current.privacyPolicy),
+                                ),
+                              );
                             },
                         ),
                       ],
@@ -326,7 +324,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 if (passwordController.text.trim() !=
                     confPasswordController.text.trim()) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(S.current.passwordMismatch)));
+                    SnackBar(content: Text(S.current.passwordMismatch)),
+                  );
 
                   return;
                 }
@@ -344,19 +343,18 @@ class _SignUpPageState extends State<SignUpPage> {
                 signUpAndNavigateToHome();
               }
             },
-            elevation: 0.0,
           ),
         ],
       ),
     );
   }
 
-  signUpAndNavigateToHome() async {
+  Future<void> signUpAndNavigateToHome() async {
     locator<AppRouter>().push(const HomeRoute());
   }
 
-  removeDisposer() {
-    for (var element in _disposers) {
+  void removeDisposer() {
+    for (final element in _disposers) {
       element.reaction.dispose();
     }
   }

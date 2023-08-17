@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_structure/core/db/app_db.dart';
-import 'package:flutter_demo_structure/core/di/api/app_exceptions.dart';
-import 'package:flutter_demo_structure/core/di/api/repo/authentication_repository.dart';
-import 'package:flutter_demo_structure/core/di/api/response/api_base/api_base.dart';
-import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/core/api/base_response/base_response.dart';
+import 'package:flutter_demo_structure/core/exceptions/app_exceptions.dart';
+import 'package:flutter_demo_structure/data/model/request/login_request_model.dart';
+import 'package:flutter_demo_structure/data/model/response/user_profile_response.dart';
 import 'package:mobx/mobx.dart';
 
 part 'login_store.g.dart';
@@ -11,33 +10,30 @@ part 'login_store.g.dart';
 class LoginStore = _LoginStoreBase with _$LoginStore;
 
 abstract class _LoginStoreBase with Store {
-  late SingleResponse loginResponse;
+  @observable
+  BaseResponse<UserData>? loginResponse;
 
   @observable
   String? errorMessage;
 
+  _LoginStoreBase();
+
   @action
-  Future login(Map<String, dynamic> data) async {
+  Future login(LoginRequestModel data) async {
     try {
       errorMessage = null;
-      var commonStoreFuture =
-          ObservableFuture<SingleResponse>(authRepo.login(data));
-      loginResponse = await commonStoreFuture;
+      /*  var commonStoreFuture =
+          ObservableFuture<SingleResponse>(authRepo.signIn(data));
+      loginResponse = await commonStoreFuture;*/
 
-      if (loginResponse.code == "1") {
-        appDB.isLogin = true;
-      } else {
-        errorMessage = loginResponse.message;
-      }
+      await Future.delayed(const Duration(seconds: 5), () {});
+      loginResponse = BaseResponse(message: "Success", code: "1");
     } on AppException catch (e) {
       errorMessage = e.toString();
     } catch (e, st) {
-      debugPrint("onCatch.....");
       debugPrint(e.toString());
-      debugPrint(st.toString());
-      errorMessage = "False";
+      debugPrintStack(stackTrace: st);
+      errorMessage = e.toString();
     }
   }
 }
-
-final authStore = locator<LoginStore>();

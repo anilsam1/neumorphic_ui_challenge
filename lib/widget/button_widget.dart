@@ -39,7 +39,9 @@ class AppButton extends StatelessWidget {
         child: Text(
           label,
           style: textMedium.copyWith(
-              color: AppColor.primaryColor, fontSize: 16.spMin),
+            color: AppColor.primaryColor,
+            fontSize: 16.spMin,
+          ),
         ),
       ),
     );

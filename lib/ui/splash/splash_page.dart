@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
-import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/core/locator/locator.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
 
 @RoutePage()
@@ -16,14 +16,14 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   @override
-  initState() {
+  void initState() {
     initSetting();
     super.initState();
   }
 
   Future<void> initSetting() async {
-    //PushNotificationsManager().init();
     Future.delayed(const Duration(seconds: 2), () {
+      final appDB = locator.get<AppDB>();
       if (!appDB.isLogin) {
         locator<AppRouter>().replaceAll([const LoginRoute()]);
       } else {
@@ -34,10 +34,8 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Center(
-        child: FlutterLogo(),
-      ),
+    return const Center(
+      child: FlutterLogo(),
     );
   }
 }

@@ -15,7 +15,7 @@ abstract class GrantPermissionStrategy {
     required final OnPermissionDenied onPermissionDenied,
     required final OnGranted onGranted,
   }) async {
-    PermissionStatus status = await permission.status;
+    final PermissionStatus status = await permission.status;
     debugPrint("GrantPermissionStrategy status: $status");
     if (status.isPermanentlyDenied) {
       onPermanentlyDenied.call();

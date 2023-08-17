@@ -39,6 +39,16 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This app need photo library permission for upload photo</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app need camera permission for capture photo and video</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app need microphone permission for capture video recording</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>Access is required to allow you to upload media</string>
+    <key>UISupportsDocumentBrowser</key>
+    <true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -47,3 +57,4 @@
 	<true/>
 </dict>
 </plist>
+

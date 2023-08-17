@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 String getVerboseDateTimeRepresentation(String dateTimes) {
-  DateFormat dateFormat = DateFormat("dd MMM, yyyy · hh:mm a");
-  DateTime dateTime = dateFormat.parse(dateTimes);
-  DateTime now = DateTime.now();
-  DateTime justNow = now.subtract(const Duration(minutes: 1));
-  DateTime localDateTime = dateTime.toLocal();
+  final DateFormat dateFormat = DateFormat("dd MMM, yyyy · hh:mm a");
+  final DateTime dateTime = dateFormat.parse(dateTimes);
+  final DateTime now = DateTime.now();
+  final DateTime justNow = now.subtract(const Duration(minutes: 1));
+  final DateTime localDateTime = dateTime.toLocal();
 
   if (!localDateTime.difference(justNow).isNegative) {
     return 'Just now';
   }
 
-  String roughTimeString = DateFormat('jm').format(dateTime);
+  final String roughTimeString = DateFormat('jm').format(dateTime);
 
   if (localDateTime.day == now.day &&
       localDateTime.month == now.month &&
@@ -20,7 +20,7 @@ String getVerboseDateTimeRepresentation(String dateTimes) {
     return roughTimeString;
   }
 
-  DateTime yesterday = now.subtract(const Duration(days: 1));
+  final DateTime yesterday = now.subtract(const Duration(days: 1));
 
   if (localDateTime.day == yesterday.day &&
       localDateTime.month == now.month &&
@@ -29,7 +29,7 @@ String getVerboseDateTimeRepresentation(String dateTimes) {
   }
 
   if (now.difference(localDateTime).inDays < 4) {
-    String weekday = DateFormat('EEEE').format(localDateTime);
+    final String weekday = DateFormat('EEEE').format(localDateTime);
 
     return '$weekday, $roughTimeString';
   }
@@ -39,14 +39,14 @@ String getVerboseDateTimeRepresentation(String dateTimes) {
 
 extension StringX on String {
   String? getTime(String outFormat) {
-    var dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(this, true);
-    var dateLocal = dateTime.toLocal();
+    final dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(this, true);
+    final dateLocal = dateTime.toLocal();
     return dateLocal.toString();
   }
 
   String? timeFromStamp({String outFormat = "hh:mm a"}) {
     try {
-      var dateTime =
+      final dateTime =
           DateTime.fromMillisecondsSinceEpoch(int.parse(this) * 1000);
 
       return DateFormat(outFormat).format(dateTime);
@@ -58,7 +58,7 @@ extension StringX on String {
   }
 
   String timeAgoFromStamp() {
-    DateTime timeStamp =
+    final DateTime timeStamp =
         DateTime.fromMillisecondsSinceEpoch(int.parse(this) * 1000);
     return DateFormat('dd MMM yyyy').format(timeStamp);
 /*
@@ -96,11 +96,12 @@ extension StringX on String {
     */
   }
 
-  String? formatDateTime(
-      {String inFormat = "yyyy-MM-dd hh:mm:ss",
-      String outFormat = "dd MMM, yyyy"}) {
+  String? formatDateTime({
+    String inFormat = "yyyy-MM-dd hh:mm:ss",
+    String outFormat = "dd MMM, yyyy",
+  }) {
     try {
-      var dateTime = DateFormat(inFormat).parse(this);
+      final dateTime = DateFormat(inFormat).parse(this);
       return DateFormat(outFormat).format(dateTime);
     } catch (error) {
       debugPrint("DateTimeHelper_timeFromStamp");

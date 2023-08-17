@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_structure/ui/auth/model/user_profile_response.dart';
+import 'package:flutter_demo_structure/data/model/response/user_profile_response.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,7 +17,7 @@ class SocialLogin {
   /// call login method
   /// var repos = await SocialLogin.loginWithTwitter();
   // debugPrint(repos.errorMessage);
-  static Future<AuthResult> loginWithTwitter() async {
+  Future<AuthResult> loginWithTwitter() async {
     final twitterLogin = TwitterLogin(
       // Consumer API keys
       apiKey: 'xxxx',
@@ -45,7 +45,7 @@ class SocialLogin {
     return authResult;
   }
 
-  static Future<User?> loginWithGoogle() async {
+  Future<User?> loginWithGoogle() async {
     await Firebase.initializeApp();
     final FirebaseAuth auth = FirebaseAuth.instance;
     final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -90,10 +90,10 @@ class SocialLogin {
 
   //AuthorizationAppleID(null, Hemang, Vyas, hemangv@hyperlinkinfosystem.net.in, authorizationCode set? true, 40615467-3bc3-46bb-ba47-ed3f32a03eb8)
 
-  static Future<UserData?> loginInWithApple() async {
+  Future<UserData?> loginInWithApple() async {
     //https://www.youtube.com/watch?v=VzRWh5QB3U8
 
-    bool isAvailable = await SignInWithApple.isAvailable();
+    final bool isAvailable = await SignInWithApple.isAvailable();
 
     debugPrint("Apple Login available..? $isAvailable");
     final clientState = const Uuid().v4();
@@ -124,10 +124,10 @@ class SocialLogin {
       debugPrint("state             ${credential.state}");
 
       if (credential.identityToken != null) {
-        var result = parseJwt(credential.identityToken!);
+        final result = parseJwt(credential.identityToken!);
         return UserData(
-          id: result["sub"],
-          email: result["email"],
+          id: result["sub"] as int?,
+          email: result["email"] as String?,
         );
       } else {
         return null;
@@ -144,7 +144,9 @@ class SocialLogin {
       });
 
       final result = await FlutterWebAuth.authenticate(
-          url: url.toString(), callbackUrlScheme: "applink");
+        url: url.toString(),
+        callbackUrlScheme: "applink",
+      );
 
       final body = Uri.parse(result).queryParameters;
       final oauthCredential = OAuthProvider("apple.com").credential(
@@ -152,7 +154,7 @@ class SocialLogin {
         accessToken: body['code'],
       );
 
-      var data =
+      final data =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
       debugPrint(data.toString());
 

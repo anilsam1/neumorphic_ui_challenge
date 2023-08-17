@@ -1,17 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_structure/core/api/base_response/base_response.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
-import 'package:flutter_demo_structure/core/di/api/req_params.dart' as Req;
-import 'package:flutter_demo_structure/core/di/api/response/api_base/api_base.dart';
-import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/core/locator/locator.dart';
+import 'package:flutter_demo_structure/data/model/request/login_request_model.dart';
+import 'package:flutter_demo_structure/data/model/response/user_profile_response.dart';
+import 'package:flutter_demo_structure/generated/assets.dart';
 import 'package:flutter_demo_structure/generated/l10n.dart';
-import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
-import 'package:flutter_demo_structure/ui/auth/login/widget/sign_up_widget.dart';
 import 'package:flutter_demo_structure/ui/auth/login/store/login_store.dart';
+import 'package:flutter_demo_structure/ui/auth/login/widget/sign_up_widget.dart';
 import 'package:flutter_demo_structure/values/export.dart';
+import 'package:flutter_demo_structure/widget/app_text_filed.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
-import 'package:flutter_demo_structure/widget/text_form_filed.dart';
+import 'package:flutter_demo_structure/widget/loading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobx/mobx.dart';
 
@@ -24,12 +26,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _isHidden = true;
   late GlobalKey<FormState> _formKey;
-  late TextEditingController emailController, passwordController;
-  late FocusNode emailNode, passwordNode;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late FocusNode emailNode;
+  late FocusNode passwordNode;
   late ValueNotifier<bool> showLoading;
-  var socialId, type = "S";
+
   List<ReactionDisposer>? _disposers;
 
   @override
@@ -41,10 +44,13 @@ class _LoginPageState extends State<LoginPage> {
     emailNode = FocusNode();
     passwordNode = FocusNode();
     showLoading = ValueNotifier<bool>(false);
+
+    addDisposer();
   }
 
   @override
   void dispose() {
+    removeDisposer();
     emailController.dispose();
     passwordController.dispose();
     emailNode.dispose();
@@ -53,29 +59,23 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // addDisposer();
-  }
-
-  /// Login Api call
-
-/*  void addDisposer() {
+  void addDisposer() {
+    final loginStore = locator.get<LoginStore>();
     _disposers ??= [
       // success reaction
-      reaction((_) => authStore.loginResponse, (SingleResponse response) {
+      reaction((_) => loginStore.loginResponse,
+          (BaseResponse<UserData>? response) {
         showLoading.value = false;
-
         debugPrint("ONResponse Login: called $response");
-        if (response.code == "1") {
+        if (response?.code == "1") {
           locator<AppRouter>().replaceAll([const HomeRoute()]);
-          appDB.isLogin = true;
-          //showMessage(response.message, type: MessageType.INFO);
+          locator.get<AppDB>().isLogin = true;
+          debugPrint("Response ${response?.message}");
+          // authStore.loginResponse = null;
         }
       }),
       // error reaction
-      reaction((_) => authStore.errorMessage, (String? errorMessage) {
+      reaction((_) => loginStore.errorMessage, (String? errorMessage) {
         showLoading.value = false;
         if (errorMessage != null) {
           ScaffoldMessenger.of(context)
@@ -83,14 +83,28 @@ class _LoginPageState extends State<LoginPage> {
         }
       }),
     ];
-  }*/
+  }
+
+  void removeDisposer() {
+    if (_disposers == null) return;
+    for (final element in _disposers!) {
+      element.reaction.dispose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Padding(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: ValueListenableBuilder(
+        valueListenable: showLoading,
+        builder: (_, bool isLoading, Widget? child) {
+          return LoadingWidget(
+            status: isLoading,
+            child: child!,
+          );
+        },
+        child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: SingleChildScrollView(
             child: Column(
@@ -149,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
             prefixIcon: IconButton(
               onPressed: null,
               icon: Image.asset(
-                Res.email,
+                Assets.imageEmail,
                 color: AppColor.primaryColor,
                 height: 26.0,
                 width: 26.0,
@@ -160,13 +174,12 @@ class _LoginPageState extends State<LoginPage> {
           AppTextField(
             label: S.current.password,
             hint: S.current.password,
-            obscureText: _isHidden,
+            obscureText: true,
             validators: passwordValidator,
             controller: passwordController,
             focusNode: passwordNode,
             keyboardType: TextInputType.visiblePassword,
             keyboardAction: TextInputAction.done,
-            maxLines: 1,
             maxLength: 15,
             suffixIcon: Align(
               alignment: Alignment.centerRight,
@@ -191,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
             prefixIcon: IconButton(
               onPressed: null,
               icon: Image.asset(
-                Res.password,
+                Assets.imagePassword,
                 color: AppColor.primaryColor,
                 height: 26.0,
                 width: 26.0,
@@ -203,47 +216,22 @@ class _LoginPageState extends State<LoginPage> {
             S.current.logIn.toUpperCase(),
             () {
               if (_formKey.currentState?.validate() ?? false) {
-                locator<AppRouter>().replaceAll([const HomeRoute()]);
-                appDB.isLogin = true;
-
-                // loginAndNavigateToHome();
+                loginAndNavigateToHome();
               }
             },
-            elevation: 0.0,
           ),
         ],
       ),
     );
   }
 
-  void _togglePasswordView() {
-    setState(() {
-      _isHidden = !_isHidden;
-    });
-  }
-
-  loginAndNavigateToHome() async {
-    var req = Map.of({
-      Req.email: emailController.text.trim(),
-      'latitude': emailController.text.trim(),
-      'longitude': emailController.text.trim(),
-      Req.deviceToken: appDB.fcmToken,
-      Req.ip: "ipAddress",
-      Req.loginType: type,
-      Req.deviceType: "A",
-      Req.deviceModel: 'info.model',
-      Req.uuid: 'info.androidId',
-    });
-    if (type == "S") {
-      req[Req.password] = passwordController.value.text;
-    }
+  Future<void> loginAndNavigateToHome() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    final logInRequest = LoginRequestModel(
+      email: emailController.text.trim(),
+      password: passwordController.value.text.trim(),
+    );
+    locator.get<LoginStore>().login(logInRequest);
     showLoading.value = true;
-    authStore.login(req);
-  }
-
-  void removeDisposer() {
-    for (var element in _disposers!) {
-      element.reaction.dispose();
-    }
   }
 }

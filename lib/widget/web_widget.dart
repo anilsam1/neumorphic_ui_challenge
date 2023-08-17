@@ -4,10 +4,12 @@ import 'package:flutter_demo_structure/widget/base_app_bar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
-  final WebViewInfoData webViewInfo;
+  final String title;
+  final String url;
 
   const WebViewPage({
-    required this.webViewInfo,
+    required this.title,
+    required this.url,
     super.key,
   });
 
@@ -32,7 +34,7 @@ class _WebViewPageState extends State<WebViewPage> {
       appBar: BaseAppBar(
         leadingIcon: true,
         showTitle: true,
-        title: widget.webViewInfo.title,
+        title: widget.title,
         backgroundColor: AppColor.white,
         leadingWidgetColor: AppColor.osloGray,
       ),
@@ -42,15 +44,17 @@ class _WebViewPageState extends State<WebViewPage> {
             WebViewWidget(
               controller: WebViewController()
                 ..setJavaScriptMode(JavaScriptMode.unrestricted)
-                ..setNavigationDelegate(NavigationDelegate(
-                  onPageFinished: (finish) {
-                    setState(() {
-                      _isLoadingPage = false;
-                    });
-                  },
-                ))
+                ..setNavigationDelegate(
+                  NavigationDelegate(
+                    onPageFinished: (finish) {
+                      setState(() {
+                        _isLoadingPage = false;
+                      });
+                    },
+                  ),
+                )
                 ..loadRequest(
-                  Uri.parse(widget.webViewInfo.url),
+                  Uri.parse(widget.url),
                 ),
             ),
             Visibility(
@@ -64,10 +68,4 @@ class _WebViewPageState extends State<WebViewPage> {
       ),
     );
   }
-}
-
-class WebViewInfoData {
-  String title, url;
-
-  WebViewInfoData(this.title, this.url);
 }

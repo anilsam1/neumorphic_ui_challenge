@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_structure/res.dart';
+import 'package:flutter_demo_structure/generated/assets.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,10 +16,10 @@ class AppBarWidget extends StatefulWidget {
   });
 
   @override
-  _AppBarWidgetState createState() => _AppBarWidgetState();
+  State<AppBarWidget> createState() => _AppBarWidgetState();
 }
 
-var paddingTop = (kToolbarHeight - 20).toDouble();
+double paddingTop = kToolbarHeight - 20;
 
 class _AppBarWidgetState extends State<AppBarWidget> {
   @override
@@ -28,12 +28,11 @@ class _AppBarWidgetState extends State<AppBarWidget> {
       color: widget.backgroundColor,
       padding: EdgeInsets.only(top: paddingTop),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           GestureDetector(
             onTap: () => Navigator.maybePop(context),
             child: Image.asset(
-              Res.back,
+              Assets.imageBack,
               height: 20.h,
               width: 80.w,
             ),

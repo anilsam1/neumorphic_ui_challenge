@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/values/colors.dart';
 
 class CustomDotsIndicator extends StatelessWidget {
-  final int currentIndex, index;
+  final int currentIndex;
+  final int index;
 
-  const CustomDotsIndicator(
-      {super.key, required this.currentIndex, required this.index});
+  const CustomDotsIndicator({
+    required this.currentIndex,
+    required this.index,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

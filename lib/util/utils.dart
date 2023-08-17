@@ -1,17 +1,21 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
   static MaterialColor createMaterialColor(Color color) {
-    List strengths = <double>[.05];
-    Map<int, Color> swatch = <int, Color>{};
-    final int r = color.red, g = color.green, b = color.blue;
+    final List<double> strengths = <double>[.05];
+    final Map<int, Color> swatch = <int, Color>{};
+    final int r = color.red;
+    final int g = color.green;
+    final int b = color.blue;
 
     for (int i = 1; i < 10; i++) {
       strengths.add(0.1 * i);
     }
-    for (var strength in strengths) {
+    for (final double strength in strengths) {
       final double ds = 0.5 - strength;
       swatch[(strength * 1000).round()] = Color.fromRGBO(
         r + ((ds < 0 ? r : (255 - r)) * ds).round(),
@@ -24,7 +28,7 @@ class Utils {
   }
 
   static Future<void> launchUrlFromApp(String url) async {
-    Uri uri = Uri.parse(url);
+    final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
@@ -35,4 +39,5 @@ class Utils {
   static void shareText(String title, String desc) {
     Share.share(desc, subject: title);
   }
+
 }

@@ -13,13 +13,12 @@ class RadioButton<T> extends StatelessWidget {
     this.decoration,
     super.key,
   })  : assert(value != null),
-        assert(groupValue != null),
-        assert(onChanged != null);
+        assert(groupValue != null);
 
   final T value;
   final T groupValue;
   final String caption;
-  final Function(T)? onChanged;
+  final Function(T) onChanged;
   final double? width;
   final double? height;
   final BoxDecoration? decoration;
@@ -28,7 +27,7 @@ class RadioButton<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onChanged!(value);
+        onChanged(value);
       },
       child: Container(
         margin: const EdgeInsets.only(right: 6, left: 6),
@@ -45,8 +44,9 @@ class RadioButton<T> extends StatelessWidget {
           child: Text(
             caption,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.button!.copyWith(
-                color: value == groupValue ? Colors.white : Colors.red),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: value == groupValue ? Colors.white : Colors.red,
+                ),
           ),
         ),
       ),

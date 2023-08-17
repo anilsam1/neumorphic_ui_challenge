@@ -40,7 +40,7 @@ class AppImage extends StatefulWidget {
   });
 
   @override
-  _AppImageState createState() => _AppImageState();
+  State<AppImage> createState() => _AppImageState();
 }
 
 class _AppImageState extends State<AppImage> {
@@ -77,21 +77,24 @@ class _AppImageState extends State<AppImage> {
     );
   }
 
-  get placeholder => widget.placeHolder ?? (widget.initial != null
-          ? initialPlaceholder
-          : AspectRatio(
-              aspectRatio: 1.5,
-              child: Transform.scale(
-                scale: 0.5,
-                child: const CircularProgressIndicator(
-                  backgroundColor: Colors.transparent,
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(AppColor.toolbarColor),
-                ),
+  Widget get placeholder {
+    if (widget.placeHolder != null) return widget.placeHolder!;
+    return widget.initial != null
+        ? initialPlaceholder
+        : AspectRatio(
+            aspectRatio: 1.5,
+            child: Transform.scale(
+              scale: 0.5,
+              child: const CircularProgressIndicator(
+                backgroundColor: Colors.transparent,
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(AppColor.toolbarColor),
               ),
-            ));
+            ),
+          );
+  }
 
-  get initialPlaceholder => Container(
+  Container get initialPlaceholder => Container(
         height: widget.radius * 2,
         width: widget.radius * 2,
         decoration: BoxDecoration(
@@ -102,7 +105,6 @@ class _AppImageState extends State<AppImage> {
           border: Border.all(
             width: widget.boarderWidth,
             color: widget.borderColor,
-            style: BorderStyle.solid,
           ),
         ),
         child: Center(

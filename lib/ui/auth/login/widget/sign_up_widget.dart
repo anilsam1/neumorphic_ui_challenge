@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_structure/generated/assets.dart';
 import 'package:flutter_demo_structure/generated/l10n.dart';
-import 'package:flutter_demo_structure/res.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -30,7 +30,7 @@ class SignUpWidget extends StatelessWidget {
         child: Column(
           children: [
             Image.asset(
-              fromLogin ? Res.add_user : Res.user,
+              fromLogin ? Assets.imageAddUser : Assets.imageUser,
               height: 28.0,
               width: 28.0,
             ),

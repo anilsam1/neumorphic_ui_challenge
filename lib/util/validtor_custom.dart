@@ -6,18 +6,19 @@ class LYDPhoneValidator extends TextFieldValidator {
   String mobileInvalid;
   String emailInvalid;
 
-  LYDPhoneValidator(
-      {String errorText = 'enter a valid LYD phone number',
-      this.mobileInvalid = 'enter a valid phone number',
-      this.emailInvalid = 'enter a valid email'})
-      : super(errorText);
+  LYDPhoneValidator({
+    String errorText = 'enter a valid LYD phone number',
+    this.mobileInvalid = 'enter a valid phone number',
+    this.emailInvalid = 'enter a valid email',
+  }) : super(errorText);
 
   // return false if you want the validator to return error
   // message when the value is empty.
 
   RegExp mobileRegex = RegExp(r"^(?:[+0]9)?[0-9]{10,12}$");
   RegExp emailRegex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+  );
 
   String emailPattern =
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";

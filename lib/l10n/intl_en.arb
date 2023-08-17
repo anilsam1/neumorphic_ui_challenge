@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appName": "Demo App",
+  "applicationTitle": "Flutter Demo Structure",
   "@appName": {
     "description": "Application Name"
   },
@@ -97,5 +97,22 @@
   "userAllowedToAccessPhotos": "User Allowed to access photos",
   "userDeniedToAccessPhotos": "User Denied to access photos",
   "search": "Search...",
-  "selectYourPhoneCode": "Select your phone code"
+  "selectYourPhoneCode": "Select your phone code",
+  "errorDuringCommunication": "Error During Communication:",
+  "invalidRequest": "Invalid Request:",
+  "unauthorised": "Unauthorised:",
+  "invalidInput": "Invalid Input:",
+  "noActiveInternetConnection": "No Active Internet Connection",
+  "connectionToServerFailedDueToInternetConnection": "Connection to server failed due to internet connection.",
+  "somethingWentWrongPleaseTryAfterSometime": "Something went wrong. Please try after sometime.",
+  "requestToServerWasCancelled": "Request to server was cancelled",
+  "connectionTimeoutWithServer": "Connection timeout with server",
+  "requestCantBeHandledForNowPleaseTryAfterSometime": "Request can't be handled for now. Please try after sometime.",
+  "pleaseLoginAgain": "Please login again.",
+  "somethingWhenWrongPleaseTryAgain": "Something when wrong. Please try again.",
+  "errorUploadingPhoto": "Error uploading photo",
+  "cvvIsInvalid": "CVV is invalid",
+  "expiryMonthIsInvalid": "Expiry month is invalid",
+  "expiryYearIsInvalid": "Expiry year is invalid",
+  "cardHasExpired": "Card has expired"
 }

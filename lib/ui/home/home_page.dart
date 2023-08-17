@@ -1,18 +1,20 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
-import 'package:flutter_demo_structure/core/locator.dart';
+import 'package:flutter_demo_structure/core/locator/locator.dart';
 import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/util/media_picker.dart';
 import 'package:flutter_demo_structure/util/permission_utils.dart';
 import 'package:flutter_demo_structure/values/export.dart';
-import 'package:flutter_demo_structure/widget/image_picker_dialog.dart';
+import 'package:flutter_demo_structure/widget/media_picker_bottomsheet.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:images_picker/images_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -22,152 +24,206 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with TickerProviderStateMixin, MediaPickerListener {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late ValueNotifier showLoading;
-  var style =
+  ButtonStyle style =
       TextButton.styleFrom(minimumSize: const Size(double.maxFinite, 20));
   int? count;
-  List<Media?>? pickedFilesList;
+  List<XFile?>? pickedFilesListStore = [];
   List<PlatformFile>? pickedDocuments;
   FilesType? type;
-  late MediaPickerHandler _mediaPickerHandler;
-  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
     showLoading = ValueNotifier<bool>(false);
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    _mediaPickerHandler = MediaPickerHandler(this, _controller);
-    _mediaPickerHandler.init();
   }
 
   @override
   void dispose() {
     showLoading.dispose();
-    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                S.current.home,
-                style: textBold.copyWith(fontSize: 30.spMin),
-              ),
-              25.0.verticalSpace,
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  if (count != null)
-                    Text(
-                      "${S.current.pickedFileCount} $count",
-                      style: textBold,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          S.current.home,
+          style: textBold.copyWith(fontSize: 30.spMin),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            25.0.verticalSpace,
+            25.0.verticalSpace,
+            Column(
+              children: [
+                if (count != null)
+                  Text(
+                    "${S.current.pickedFileCount} $count",
+                    style: textBold,
+                  ),
+                10.0.verticalSpace,
+                if (pickedFilesListStore != null)
+                  Wrap(
+                    children: pickedFilesListStore!
+                        .map(
+                          (e) => e != null
+                              ? Image.file(
+                                  File(e.path),
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                )
+                              : const SizedBox.shrink(),
+                        )
+                        .toList(),
+                  ),
+                if (pickedDocuments != null && type == FilesType.audio ||
+                    type == FilesType.documents)
+                  Wrap(
+                    children: pickedDocuments!
+                        .map(
+                          (e) => Image.file(
+                            File(e.path!),
+                            height: 100,
+                            width: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                        .toList(),
+                  )
+              ],
+            ),
+            25.0.verticalSpace,
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () =>
+                            requestCameraPermissions().then((value) async {
+                          if (value) {
+                            pickFile(FilesType.image);
+                          }
+                        }),
+                        style: style,
+                        child: Text(S.current.pickImage),
+                      ),
                     ),
-                  10.0.verticalSpace,
-                  if (pickedFilesList != null)
-                    Wrap(
-                        direction: Axis.horizontal,
-                        children: pickedFilesList!
-                            .map(
-                              (e) => e != null
-                                  ? Image.file(
-                                      File(e.thumbPath!),
-                                      height: 100,
-                                      width: 100,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : const SizedBox.shrink(),
-                            )
-                            .toList()),
-                  if (pickedDocuments != null && type == FilesType.audio ||
-                      type == FilesType.documents)
-                    Wrap(
-                      direction: Axis.horizontal,
-                      children: pickedDocuments!
-                          .map(
-                            (e) => Image.file(
-                              File(e.path!),
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                          .toList(),
-                    )
-                ],
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () =>
+                            requestCameraPermissions().then((value) async {
+                          if (value) {
+                            pickFile(FilesType.video);
+                          }
+                        }),
+                        style: style,
+                        child: Text(S.current.pickVideo),
+                      ),
+                    ),
+                  ],
+                ),
+                10.0.verticalSpace,
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () =>
+                            requestCameraPermissions().then((value) async {
+                          if (value) {
+                            pickFile(FilesType.documents);
+                          }
+                        }),
+                        style: style,
+                        child: Text(S.current.pickDocuments),
+                      ),
+                    ),
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () =>
+                            requestCameraPermissions().then((value) async {
+                          if (value) {
+                            pickFile(FilesType.audio);
+                          }
+                        }),
+                        style: style,
+                        child: Text(S.current.pickAudio),
+                      ),
+                    ),
+                  ],
+                ),
+                20.0.verticalSpace,
+              ],
+            ),
+            25.0.verticalSpace,
+            buildTakePhotoPermission(context),
+            25.0.verticalSpace,
+            TextButton(
+              onPressed: () {
+                locator.get<AppDB>().logout();
+                locator<AppRouter>().replaceAll([const LoginRoute()]);
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: AppColor.accentColor,
               ),
-              25.0.verticalSpace,
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () => pickFile(FilesType.image),
-                          style: style,
-                          child: Text(S.current.pickImage),
-                        ),
-                      ),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () => pickFile(FilesType.video),
-                          style: style,
-                          child: Text(S.current.pickVideo),
-                        ),
-                      ),
-                    ],
-                  ),
-                  10.0.verticalSpace,
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () => pickFile(FilesType.documents),
-                          style: style,
-                          child: Text(S.current.pickDocuments),
-                        ),
-                      ),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () => pickFile(FilesType.audio),
-                          style: style,
-                          child: Text(S.current.pickAudio),
-                        ),
-                      ),
-                    ],
-                  ),
-                  20.0.verticalSpace,
-                ],
-              ),
-              25.0.verticalSpace,
-              buildTakePhotoPermission(context),
-              TextButton(
-                onPressed: () {
-                  appDB.logout();
-                  locator<AppRouter>().replaceAll([const LoginRoute()]);
-                },
-                style: TextButton.styleFrom(backgroundColor: Colors.grey),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
                   S.current.logout,
-                  style: textBold,
+                  style: textBold.copyWith(color: AppColor.primaryColor),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
+  }
+
+  Future<bool> requestCameraPermissions() async {
+    Map<Permission, PermissionStatus> permissions = {};
+    if (Platform.isAndroid) {
+      final androidInfo = await DeviceInfoPlugin().androidInfo;
+      permissions = await [
+        Permission.camera,
+        Permission.videos,
+        if (androidInfo.version.sdkInt > 32)
+          Permission.photos
+        else
+          Permission.storage,
+      ].request();
+    } else {
+      permissions = await [
+        Permission.camera,
+        Permission.storage,
+        Permission.videos,
+      ].request();
+    }
+
+    final PermissionStatus? cameraStatus = permissions[Permission.camera];
+    final PermissionStatus? storageStatus = permissions[Permission.storage];
+    final PermissionStatus? videoStatus = permissions[Permission.videos];
+
+    debugPrint(
+      "permission status : camera $cameraStatus storage $storageStatus video $videoStatus ",
+    );
+
+    if ((cameraStatus?.isGranted == true || cameraStatus?.isLimited == true) &&
+        (videoStatus?.isGranted == true ||
+            videoStatus?.isLimited == true ||
+            storageStatus?.isGranted == true ||
+            storageStatus?.isLimited == true)) {
+      debugPrint('Camera Permission: GRANTED');
+      return true;
+    }
+    return false;
   }
 
   Widget buildTakePhotoPermission(BuildContext context) {
@@ -189,17 +245,13 @@ class _HomePageState extends State<HomePage>
               ),
               onGranted: () => ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    S.current.userAllowedToAccessPhotos,
-                  ),
+                  content: Text(S.current.userAllowedToAccessPhotos),
                 ),
               ),
               onPermissionDenied: () =>
                   ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    S.current.userDeniedToAccessPhotos,
-                  ),
+                  content: Text(S.current.userDeniedToAccessPhotos),
                 ),
               ),
             );
@@ -211,53 +263,69 @@ class _HomePageState extends State<HomePage>
 
   Future<void> pickFile(FilesType type) async {
     setState(() {
-      pickedFilesList = null;
+      pickedFilesListStore = null;
       pickedDocuments = null;
       this.type = null;
     });
     switch (type) {
       case FilesType.image:
-        pickedFilesList = _mediaPickerHandler.showDialog(
-          context,
-          PickFileType.image,
-          maxPickFileCount: 5,
-          cropOption: CropOption(aspectRatio: CropAspectRatio.wh16x9),
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (context) => MediaPickerSheet(
+            pickFileType: PickedFileType.image,
+            onSelectFile: (file, pickedFileType) {
+              if (file != null) {
+                if (mounted) {
+                  setState(() {
+                    count = count != null ? count! + 1 : 1;
+                    pickedFilesListStore?.add(file);
+                  });
+                }
+              }
+            },
+          ),
         );
         break;
       case FilesType.video:
-        pickedFilesList = _mediaPickerHandler.showDialog(
-          context,
-          PickFileType.video,
-          maxPickFileCount: 5,
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (context) => MediaPickerSheet(
+            pickFileType: PickedFileType.video,
+            onSelectFile: (file, pickedFileType) {
+              debugPrint('Selected media type $pickedFileType');
+              debugPrint('Selected file path ${file?.path}');
+              if (file != null) {
+                if (mounted) {
+                  setState(() {
+                    count = count != null ? count! + 1 : 1;
+                    pickedFilesListStore?.add(file);
+                  });
+                }
+              }
+            },
+          ),
         );
         break;
       case FilesType.documents:
         pickedDocuments =
-            await MediaPicker.pickDocument(fileType: FileType.any);
+            await DocumentPicker.pickDocument(fileType: FileType.any);
         break;
       case FilesType.audio:
-        pickedDocuments = await MediaPicker.pickDocument(
-            fileType: FileType.audio, allowMultiple: true);
+        pickedDocuments = await DocumentPicker.pickDocument(
+          fileType: FileType.audio,
+          allowMultiple: true,
+        );
         break;
     }
-    if (pickedFilesList != null) {
-      if (mounted) setState(() => count = pickedFilesList!.length);
+    if (pickedFilesListStore != null) {
+      if (mounted) setState(() => count = pickedFilesListStore!.length);
     }
     if (pickedDocuments != null) {
       if (mounted) setState(() => count = pickedDocuments!.length);
-    }
-  }
-
-  @override
-  pickedFiles(List<Media?>? pickedFilesList, PickFileType pickFileType) {
-    debugPrint('Requested Media type $pickFileType');
-    if (pickedFilesList != null) {
-      if (mounted) {
-        setState(() => {
-              count = pickedFilesList?.length,
-              pickedFilesList = pickedFilesList,
-            });
-      }
     }
   }
 }

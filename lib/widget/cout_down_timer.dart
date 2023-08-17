@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+typedef CountDownFormatter = String Function(int seconds);
+
 class CountDownTimer extends StatefulWidget {
   const CountDownTimer({
     required this.secondsRemaining,
@@ -11,7 +13,7 @@ class CountDownTimer extends StatefulWidget {
 
   final int secondsRemaining;
   final Function whenTimeExpires;
-  final Function countDownFormatter;
+  final CountDownFormatter? countDownFormatter;
   final TextStyle countDownTimerStyle;
 
   @override
@@ -24,9 +26,9 @@ class _CountDownTimerState extends State<CountDownTimer>
   late Duration duration;
 
   String get timerDisplayString {
-    Duration duration = _controller.duration! * _controller.value;
+    final Duration duration = _controller.duration! * _controller.value;
     return widget.countDownFormatter != null
-        ? widget.countDownFormatter(duration.inSeconds)
+        ? widget.countDownFormatter!.call(duration.inSeconds)
         : formatHHMMSS(duration.inSeconds);
     // In case user doesn't provide formatter use the default one
     // for that create a method which will be called formatHHMMSS or whatever you like
@@ -81,27 +83,29 @@ class _CountDownTimerState extends State<CountDownTimer>
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: AnimatedBuilder(
-            animation: StepTween(
-              begin: 30, // THIS IS A USER ENTERED NUMBER
-              end: 0,
-            ).animate(_controller),
-            builder: (_, Widget? child) {
-              return Text(
-                timerDisplayString,
-                style: widget.countDownTimerStyle,
-              );
-            }));
+      child: AnimatedBuilder(
+        animation: StepTween(
+          begin: 30, // THIS IS A USER ENTERED NUMBER
+          end: 0,
+        ).animate(_controller),
+        builder: (_, Widget? child) {
+          return Text(
+            timerDisplayString,
+            style: widget.countDownTimerStyle,
+          );
+        },
+      ),
+    );
   }
 
   String formatHHMMSS(int seconds) {
-    int hours = (seconds / 3600).truncate();
-    seconds = (seconds % 3600).truncate();
-    int minutes = (seconds / 60).truncate();
+    final int hours = (seconds / 3600).truncate();
+    final int truncateSeconds = seconds % 3600;
+    final int minutes = (seconds / 60).truncate();
 
-    String hoursStr = (hours).toString().padLeft(2, '0');
-    String minutesStr = (minutes).toString().padLeft(2, '0');
-    String secondsStr = (seconds % 60).toString().padLeft(2, '0');
+    final String hoursStr = (hours).toString().padLeft(2, '0');
+    final String minutesStr = (minutes).toString().padLeft(2, '0');
+    final String secondsStr = (truncateSeconds % 60).toString().padLeft(2, '0');
 
     if (hours == 0) {
       return "$minutesStr:$secondsStr";

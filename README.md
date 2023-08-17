@@ -1,72 +1,38 @@
-**A Demo Structure Flutter project.**
-
-```bash
-├───android                             <-- Android related code
-├───assets                              <-- Here we add app icons/image/fonts
-│   ├───fonts
-│   └───image
-├───ios                                 <-- iOS related code
-├───lib
-│   ├───core                            <-- Core files of apps 
-│   │   ├───db                          <-- Core files of apps 
-│   │   ├───di
-│   │   │   └───api                     <-- API configs
-│   │   │       ├───interceptor         <-- API interceptors
-│   │   │       ├───repo                <-- Repositories for API calls
-│   │   │       ├───response            <-- Response parser fo API calls
-│   │   │       │   ├───api_base        <-- Base response parser fo API calls
-│   │   │       │   └───base            <-- Common response parser fo API calls
-│   │   │       └───service             <-- Services for API calls
-│   │   └───navigation                  <-- Navigation service related configs
-│   ├───fcm                             <-- Fcm service related configs
-│   ├───model                           <-- PODO models of API calls
-│   ├───ui                              <-- App UI
-│   │   ├───auth                        <-- App UI module
-│   │   │   ├───login
-│   │   │   │   └───store               <-- store for API call using Mobx structure
-│   │   │   └───sign_up
-│   │   └───home
-│   ├───util                            <-- Utils/Helper
-│   │   └───credit_card_validators      <-- Common credit card validator                     
-│   ├───values                          <-- Common values, dummy data, App theme,style configs
-│   │   └───extensions                  <-- Extension methods
-│   └───widget                          <-- Common widgets
-├───test                                <-- Widget, Unit, Integration test
-└───web                                 <-- Web configs & web files
-    └───icons                           <-- icons for web
-```
-
+# A Demo Structure Flutter project.
 
 ## Environment
 
-**Flutter version** : 3.7.11
+**Flutter version** : 3.10.x
 
 **Flutter channel** : Stable
 
+## Device OS support
+
 **iOS**
-- iOS 12+
+- iOS 13+
 
 **Android**
-- Android 5.0+
+- Android 6.0+
     - minSdkVersion 21
 - targetSdkVersion 33
 
 ## Code Style
 - [Effective Dart](https://dart.dev/guides/language/effective-dart)
 
-## Assets, Fonts
+## Code Analysis
+- [SonarQube](https://www.sonarsource.com/products/sonarqube/) 
 
-**If added some assets or fonts**
-
-- Use [AssetsRefGenerator](https://github.com/AndrewShen812/AssetsRefGenerator) **(lib/res.dart)**
+## Assets Generator
+- Use [FlutterAssetsGenerator](https://plugins.jetbrains.com/plugin/15427-flutterassetsgenerator) **(lib/generated/assets.dart)**
 
 ## Models
 
-**models for api results**
+**To generate models use below site/plugin**
 
-- Use [QuickType](https://app.quicktype.io/)
+- [QuickType](https://app.quicktype.io/)
+- [AdvancedJson2Dart](https://plugins.jetbrains.com/plugin/16236-advancedjson2dart)
 
-#### Architecture
+## Architecture
 
 |Working status|Category|Description|
 |:---:|---|---|
@@ -74,3 +40,30 @@
 | ✅ | Networking | Using [dio](https://pub.dev/packages/dio) 
 | ✅ | Data | Using [json serializable](https://pub.dev/packages/json_serializable) 
 | ✅ | Session Management | Using [Hive](https://pub.dev/packages/hive)
+
+
+## Localization
+Using this library to handle multi-languages. Follow this guide to understand and config languages files
+
+### Setup Step:
+
+* VSC, AS, IJ users need to install the plugins from the market.
+* vs-code: https://marketplace.visualstudio.com/items?itemName=localizely.flutter-intl
+* intelliJ / android studio: https://plugins.jetbrains.com/plugin/13666-flutter-intl
+
+* others/CLI:
+```
+flutter pub global activate intl_utils
+
+flutter pub global run intl_utils:generate
+```
+
+### Initialize plugins (IntelliJ reference)
+1. Open Flutter intl in `Action`
+2. Click on `arb File`
+3. To add / remove Locale, choose `Add Locale` / `Remove Locale`
+4. Then it will prompt which locale
+
+**Current available locale is en**
+
+Link library : https://pub.dev/packages/intl_utils

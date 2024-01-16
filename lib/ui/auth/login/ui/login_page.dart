@@ -1,21 +1,27 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:dart_ipify/dart_ipify.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_structure/core/api/base_response/base_response.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
 import 'package:flutter_demo_structure/core/locator/locator.dart';
 import 'package:flutter_demo_structure/data/model/request/login_request_model.dart';
-import 'package:flutter_demo_structure/data/model/response/user_profile_response.dart';
 import 'package:flutter_demo_structure/generated/assets.dart';
 import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
-import 'package:flutter_demo_structure/ui/auth/login/store/login_store.dart';
 import 'package:flutter_demo_structure/ui/auth/login/widget/sign_up_widget.dart';
+import 'package:flutter_demo_structure/ui/auth/store/auth_store.dart';
 import 'package:flutter_demo_structure/values/export.dart';
 import 'package:flutter_demo_structure/widget/app_text_filed.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
 import 'package:flutter_demo_structure/widget/loading_widget.dart';
+import 'package:flutter_demo_structure/widget/show_message.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobx/mobx.dart';
+
+import '../../../../core/api/base_response/base_response.dart';
+import '../../../../data/model/response/user_profile_response.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -60,22 +66,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void addDisposer() {
-    final loginStore = locator.get<LoginStore>();
     _disposers ??= [
       // success reaction
-      reaction((_) => loginStore.loginResponse,
-          (BaseResponse<UserData>? response) {
+      reaction((_) => authStore.loginResponse,
+          (BaseResponse<UserData?>? response) {
         showLoading.value = false;
-        debugPrint("ONResponse Login: called $response");
         if (response?.code == "1") {
-          locator<AppRouter>().replaceAll([const HomeRoute()]);
-          locator.get<AppDB>().isLogin = true;
-          debugPrint("Response ${response?.message}");
-          // authStore.loginResponse = null;
+          showMessage(response?.message ?? "");
+          appRouter.replaceAll([const HomeRoute()]);
+          appDB.isLogin = true;
         }
       }),
       // error reaction
-      reaction((_) => loginStore.errorMessage, (String? errorMessage) {
+      reaction((_) => authStore.errorMessage, (String? errorMessage) {
         showLoading.value = false;
         if (errorMessage != null) {
           ScaffoldMessenger.of(context)
@@ -227,11 +230,36 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> loginAndNavigateToHome() async {
     FocusScope.of(context).requestFocus(FocusNode());
-    final logInRequest = LoginRequestModel(
-      email: emailController.text.trim(),
-      password: passwordController.value.text.trim(),
-    );
-    locator.get<LoginStore>().login(logInRequest);
-    showLoading.value = true;
+    try {
+      showLoading.value = true;
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      //This is just a sample request body, you need to use and edit it as per your API requirement.
+      var ipAddress = await Ipify.ipv4();
+      final logInRequest = LoginRequestModel(
+          loginType: "S",
+          deviceToken: appDB.fcmToken,
+          countryCode: "+91",
+          phone: "65765765767",
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          ip: ipAddress);
+      if (Platform.isAndroid) {
+        var androidInfo = await deviceInfo.androidInfo;
+        logInRequest.uuid = androidInfo.id;
+        logInRequest.deviceModel = androidInfo.device;
+        logInRequest.deviceType = "A";
+      } else if (Platform.isIOS) {
+        var iOSInfo = await deviceInfo.iosInfo;
+        logInRequest.uuid = iOSInfo.identifierForVendor;
+        logInRequest.deviceModel = iOSInfo.name;
+        logInRequest.osVersion = iOSInfo.systemVersion;
+        logInRequest.deviceType = "I";
+      }
+      authStore.login(logInRequest);
+    } catch (e, st) {
+      showLoading.value = false;
+      showMessage(S.of(context).pleaseCheckYourInternetConnection);
+      debugPrintStack(stackTrace: st);
+    }
   }
 }

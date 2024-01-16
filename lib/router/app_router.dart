@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_demo_structure/core/locator/locator.dart';
 import 'package:flutter_demo_structure/ui/auth/login/ui/login_page.dart';
 import 'package:flutter_demo_structure/ui/auth/sign_up/sign_up_page.dart';
 import 'package:flutter_demo_structure/ui/home/home_page.dart';
@@ -22,3 +23,5 @@ class AppRouter extends _$AppRouter {
     AutoRoute(page: HomeRoute.page),
   ];
 }
+
+final appRouter = locator<AppRouter>();

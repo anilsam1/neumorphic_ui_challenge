@@ -1,3 +1,4 @@
+import 'package:flutter_demo_structure/core/locator/locator.dart';
 import 'package:flutter_demo_structure/data/model/response/user_profile_response.dart';
 import 'package:hive/hive.dart';
 
@@ -53,3 +54,5 @@ class AppDB {
     firstTime = true;
   }
 }
+
+final appDB = locator<AppDB>();

@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_demo_structure/core/locator/locator.dart';
 import 'package:flutter_demo_structure/service/enc_service.dart';
 
+import '../../db/app_db.dart';
+
 class CustomInterceptors extends Interceptor {
   @override
   Future onRequest(
@@ -15,14 +17,13 @@ class CustomInterceptors extends Interceptor {
     options.headers['responseType'] = 'text/plain';
     options.responseType = ResponseType.plain;
 
-    /// TODO: Uncomment below code in production app
-    //options.headers.putIfAbsent("api-key", () => appDB.apiKey);
-    // if (appDB.token.isNotEmpty) {
-    //   options.headers['token'] = enc.encrypt(appDB.token);
-    // }
-    // if (options.data != null) {
-    //   options.data = enc.encrypt(jsonEncode(options.data));
-    // }
+    options.headers.putIfAbsent("api-key", () => appDB.apiKey);
+    if (appDB.token.isNotEmpty) {
+      options.headers['token'] = enc.encrypt(appDB.token);
+    }
+    if (options.data != null) {
+      options.data = enc.encrypt(jsonEncode(options.data));
+    }
 
     return handler.next(options);
   }

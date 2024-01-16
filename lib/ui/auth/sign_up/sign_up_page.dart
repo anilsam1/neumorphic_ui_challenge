@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_demo_structure/core/locator/locator.dart';
-import 'package:flutter_demo_structure/generated/assets.dart';
 import 'package:flutter_demo_structure/generated/l10n.dart';
 import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/ui/auth/login/widget/sign_up_widget.dart';
@@ -14,6 +13,8 @@ import 'package:flutter_demo_structure/widget/app_text_filed.dart';
 import 'package:flutter_demo_structure/widget/button_widget_inverse.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobx/mobx.dart';
+
+import '../../../generated/assets.dart';
 
 @RoutePage()
 class SignUpPage extends StatefulWidget {
@@ -35,6 +36,7 @@ class _SignUpPageState extends State<SignUpPage> {
   late ValueNotifier<bool> showLoading;
   late ValueNotifier<bool> _isRead;
   late List<ReactionDisposer> _disposers;
+
   bool get isCurrent => !ModalRoute.of(context)!.isCurrent;
 
   Country _selectedDialogCountry = CountryPickerUtils.getCountryByIsoCode('US');

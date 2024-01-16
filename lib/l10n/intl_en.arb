@@ -114,5 +114,6 @@
   "cvvIsInvalid": "CVV is invalid",
   "expiryMonthIsInvalid": "Expiry month is invalid",
   "expiryYearIsInvalid": "Expiry year is invalid",
-  "cardHasExpired": "Card has expired"
+  "cardHasExpired": "Card has expired",
+  "pleaseCheckYourInternetConnection": "Please check your internet connection"
 }

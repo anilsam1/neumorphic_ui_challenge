@@ -66,6 +66,8 @@ class UserData {
   @HiveField(19)
   @JsonKey(name: "refer_total")
   int? referTotal;
+  @JsonKey(name: "social_id")
+  String? socialId;
 
   UserData({
     this.id,
@@ -88,6 +90,7 @@ class UserData {
     this.storyTotal,
     this.joiningBonus,
     this.referTotal,
+    this.socialId,
   });
 
   static UserData fromJson(Map<String, dynamic> json) =>

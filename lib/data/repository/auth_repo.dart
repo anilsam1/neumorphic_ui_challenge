@@ -3,7 +3,7 @@ import 'package:flutter_demo_structure/data/model/request/login_request_model.da
 import 'package:flutter_demo_structure/data/model/response/user_profile_response.dart';
 
 abstract class AuthRepository {
-  Future<BaseResponse<UserData?>> signIn(LoginRequestModel data);
+  Future<BaseResponse<UserData?>> signIn(LoginRequestModel request);
 
   Future<BaseResponse> logout();
 }

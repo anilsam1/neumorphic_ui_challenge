@@ -5,9 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_structure/core/db/app_db.dart';
-import 'package:flutter_demo_structure/core/locator/locator.dart';
 import 'package:flutter_demo_structure/generated/l10n.dart';
-import 'package:flutter_demo_structure/router/app_router.dart';
 import 'package:flutter_demo_structure/util/media_picker.dart';
 import 'package:flutter_demo_structure/util/permission_utils.dart';
 import 'package:flutter_demo_structure/values/export.dart';
@@ -15,6 +13,8 @@ import 'package:flutter_demo_structure/widget/media_picker_bottomsheet.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../../router/app_router.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -167,8 +167,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             25.0.verticalSpace,
             TextButton(
               onPressed: () {
-                locator.get<AppDB>().logout();
-                locator<AppRouter>().replaceAll([const LoginRoute()]);
+                appDB.logout();
+                appRouter.replaceAll([const LoginRoute()]);
               },
               style: TextButton.styleFrom(
                 backgroundColor: AppColor.accentColor,

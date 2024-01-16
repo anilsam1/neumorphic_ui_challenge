@@ -4,11 +4,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_structure/core/db/app_db.dart';
-import 'package:flutter_demo_structure/core/exceptions/app_exceptions.dart';
-import 'package:flutter_demo_structure/core/locator/locator.dart';
 import 'package:flutter_demo_structure/generated/l10n.dart';
-import 'package:flutter_demo_structure/router/app_router.dart';
+
+import '../../router/app_router.dart';
+import '../db/app_db.dart';
 
 class DioExceptionUtil {
   // general methods:------------------------------------------------------------
@@ -19,66 +18,59 @@ class DioExceptionUtil {
     switch (error.type) {
       case DioExceptionType.unknown:
         if (error.error is SocketException) {
-          throw ConnectionException(
-            S.current.connectionToServerFailedDueToInternetConnection,
-          );
+          errorDescription =
+              S.current.connectionToServerFailedDueToInternetConnection;
         } else if (error.response!.statusCode == -9) {
-          throw NoInternetException(S.current.noActiveInternetConnection);
+          errorDescription = S.current.noActiveInternetConnection;
         } else {
-          throw InvalidInputException(
-            S.current.somethingWentWrongPleaseTryAfterSometime,
-          );
+          errorDescription = S.current.somethingWentWrongPleaseTryAfterSometime;
         }
-
+        break;
       case DioExceptionType.cancel:
         errorDescription = S.current.requestToServerWasCancelled;
         break;
       case DioExceptionType.connectionTimeout:
-        throw RequestCanceledException(S.current.connectionTimeoutWithServer);
-
+        errorDescription = S.current.connectionTimeoutWithServer;
+        break;
       case DioExceptionType.receiveTimeout:
-        throw ServerSideException(
-          S.current.requestCantBeHandledForNowPleaseTryAfterSometime,
-        );
+        errorDescription =
+            S.current.requestCantBeHandledForNowPleaseTryAfterSometime;
+        break;
 
       case DioExceptionType.badResponse:
         debugPrint("Response:");
         debugPrint(error.toString());
         if (error.response!.statusCode == 12039 ||
             error.response!.statusCode == 12040) {
-          throw ConnectionException(
-            S.current.connectionToServerFailedDueToInternetConnection,
-          );
+          errorDescription =
+              S.current.connectionToServerFailedDueToInternetConnection;
         } else if (401 == error.response!.statusCode) {
-          locator.get<AppDB>().logout();
-          locator<AppRouter>().replaceAll([const LoginRoute()]);
-          throw UnauthorisedException(S.current.pleaseLoginAgain);
+          errorDescription = S.current.pleaseLoginAgain;
+          appDB.logout();
+          appRouter.replaceAll([const LoginRoute()]);
         } else if (401 < error.response!.statusCode! &&
             error.response!.statusCode! <= 417) {
-          throw BadRequestException(S.current.somethingWhenWrongPleaseTryAgain);
+          errorDescription = S.current.somethingWhenWrongPleaseTryAgain;
         } else if (500 <= error.response!.statusCode! &&
             error.response!.statusCode! <= 505) {
-          throw ServerSideException(
-            S.current.requestCantBeHandledForNowPleaseTryAfterSometime,
-          );
+          errorDescription =
+              S.current.requestCantBeHandledForNowPleaseTryAfterSometime;
         } else {
-          throw InvalidInputException(
-            S.current.somethingWentWrongPleaseTryAfterSometime,
-          );
+          errorDescription = S.current.somethingWentWrongPleaseTryAfterSometime;
         }
-
+        break;
       case DioExceptionType.sendTimeout:
-        throw ServerSideException(
-          S.current.requestCantBeHandledForNowPleaseTryAfterSometime,
-        );
+        errorDescription =
+            S.current.requestCantBeHandledForNowPleaseTryAfterSometime;
+        break;
       case DioExceptionType.badCertificate:
-        throw ServerSideException(
-          S.current.requestCantBeHandledForNowPleaseTryAfterSometime,
-        );
+        errorDescription =
+            S.current.requestCantBeHandledForNowPleaseTryAfterSometime;
+        break;
       case DioExceptionType.connectionError:
-        throw RequestCanceledException(S.current.connectionTimeoutWithServer);
+        errorDescription = S.current.connectionTimeoutWithServer;
+        break;
     }
-
     return errorDescription;
   }
 }

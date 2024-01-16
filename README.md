@@ -2,7 +2,7 @@
 
 ## Environment
 
-**Flutter version** : 3.10.x
+**Flutter version** : 3.16.x
 
 **Flutter channel** : Stable
 
